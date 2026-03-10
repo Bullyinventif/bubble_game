@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bubble Game</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Nunito:wght@400;700;800&family=Permanent+Marker&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --purple-dark: #2a007a;
+    --purple-mid: #4a00c8;
+    --purple-bg: #5500dd;
+    --blue-card: #3366cc;
+    --blue-card-light: #4488ee;
+    --blue-hover: #55aaff;
+    --yellow: #FFE000;
+    --green-neon: #00ff88;
+    --pink: #ff44aa;
+    --white: #ffffff;
+    --text-shadow-blue: 0 0 8px rgba(100,180,255,0.8);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: linear-gradient(160deg, #1a0060 0%, var(--purple-bg) 40%, #3300aa 100%);
+    min-height: 100vh;
+    font-family: 'Nunito', sans-serif;
+    color: white;
+    overflow-x: hidden;
+  }
+
+  /* Bubbles background */
+  .bubble-bg {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+  }
+  .bubble {
+    position: absolute;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, rgba(255,255,255,0.25), rgba(100,150,255,0.05));
+    border: 1px solid rgba(255,255,255,0.15);
+    animation: floatUp linear infinite;
+  }
+  @keyframes floatUp {
+    0% { transform: translateY(110vh) scale(0.8); opacity: 0; }
+    10% { opacity: 0.6; }
+    90% { opacity: 0.3; }
+    100% { transform: translateY(-10vh) scale(1.1); opacity: 0; }
+  }
+
+  /* NAV */
+  nav {
+    position: relative;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    padding: 12px 24px;
+    background: rgba(0,0,0,0.35);
+    border-bottom: 2px solid rgba(255,255,255,0.1);
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .nav-logo {
+    width: 36px;
+    height: 36px;
+    background: linear-gradient(135deg, #4488ff, #aa44ff);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    margin-right: 8px;
+    box-shadow: 0 0 12px rgba(100,150,255,0.5);
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .nav-links a {
+    color: white;
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 700;
+    padding: 4px 14px;
+    border-radius: 20px;
+    transition: all 0.2s;
+    opacity: 0.85;
+  }
+  .nav-links a:hover {
+    background: rgba(255,255,255,0.15);
+    opacity: 1;
+  }
+  .nav-links a.active {
+    color: var(--yellow);
+    text-shadow: 0 0 10px rgba(255,220,0,0.7);
+  }
+  .nav-links a.green { color: var(--green-neon); text-shadow: 0 0 8px rgba(0,255,136,0.5); }
+
+  /* HEADER */
+  header {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    padding: 40px 20px 30px;
+  }
+
+  .site-title {
+    font-family: 'Permanent Marker', cursive;
+    font-size: clamp(2.8rem, 8vw, 5rem);
+    line-height: 1;
+    letter-spacing: 2px;
+  }
+  .site-title .bubble-word {
+    color: white;
+    text-shadow: 3px 3px 0 rgba(0,0,0,0.4), 0 0 30px rgba(150,200,255,0.6);
+  }
+  .site-title .game-word {
+    font-family: 'Orbitron', monospace;
+    font-size: 0.75em;
+    color: var(--yellow);
+    text-shadow: 3px 3px 0 rgba(0,0,0,0.5), 0 0 20px rgba(255,220,0,0.5);
+    letter-spacing: 4px;
+  }
+  .title-dot {
+    color: white;
+    font-family: 'Permanent Marker', cursive;
+  }
+
+  .header-subtitle {
+    margin-top: 10px;
+    font-size: 1rem;
+    color: rgba(255,255,255,0.6);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+  }
+
+  /* SECTION TITLE */
+  .section-header {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    margin: 10px 0 20px;
+    font-size: 0.85rem;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+  }
+
+  /* GRID */
+  .games-grid {
+    position: relative;
+    z-index: 10;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 0 16px 40px;
+  }
+
+  /* CARD */
+  .game-card {
+    background: linear-gradient(145deg, var(--blue-card-light), var(--blue-card));
+    border-radius: 18px;
+    overflow: hidden;
+    border: 2px solid rgba(255,255,255,0.2);
+    box-shadow: 0 8px 25px rgba(0,0,50,0.4), inset 0 1px 0 rgba(255,255,255,0.2);
+    cursor: pointer;
+    transition: transform 0.25s, box-shadow 0.25s;
+    display: flex;
+    flex-direction: column;
+  }
+  .game-card:hover {
+    transform: translateY(-6px) scale(1.02);
+    box-shadow: 0 16px 40px rgba(0,0,80,0.5), 0 0 20px rgba(100,180,255,0.4), inset 0 1px 0 rgba(255,255,255,0.3);
+  }
+  .game-card.placeholder {
+    opacity: 0.65;
+  }
+  .game-card.placeholder:hover {
+    opacity: 0.9;
+  }
+
+  /* Card title bar */
+  .card-title-bar {
+    padding: 10px 12px 6px;
+  }
+  .card-title {
+    font-size: 0.82rem;
+    font-weight: 800;
+    line-height: 1.2;
+    text-shadow: var(--text-shadow-blue);
+  }
+  .game-card:nth-child(1) .card-title { color: #88ccff; }
+  .game-card:nth-child(2) .card-title { color: var(--green-neon); }
+  .game-card:nth-child(3) .card-title { color: #ffaa44; }
+  .game-card:nth-child(4) .card-title { color: var(--pink); }
+
+  /* Screenshot */
+  .card-screenshot {
+    margin: 0 10px;
+    border-radius: 10px;
+    overflow: hidden;
+    background: #000000;
+    aspect-ratio: 4/3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(255,255,255,0.1);
+    position: relative;
+  }
+  .card-screenshot img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  input[type="file"] { display: none; }
+
+  /* Card body */
+  .card-body {
+    padding: 8px 12px 12px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .card-desc {
+    font-size: 0.8rem;
+    color: rgba(255,255,255,0.85);
+    line-height: 1.4;
+    flex: 1;
+    min-height: 36px;
+  }
+  .card-desc[contenteditable="true"]:focus {
+    outline: 1px dashed rgba(255,255,255,0.3);
+    background: rgba(0,0,0,0.15);
+    border-radius: 4px;
+    padding: 2px 4px;
+  }
+
+  /* Play button */
+  .play-btn {
+    display: block;
+    text-align: center;
+    background: linear-gradient(135deg, rgba(255,255,255,0.25), rgba(255,255,255,0.1));
+    border: 1.5px solid rgba(255,255,255,0.4);
+    border-radius: 25px;
+    padding: 7px 12px;
+    font-size: 0.75rem;
+    font-weight: 800;
+    color: white;
+    text-decoration: none;
+    letter-spacing: 1px;
+    transition: all 0.2s;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  }
+  .play-btn:hover {
+    background: linear-gradient(135deg, rgba(255,255,255,0.4), rgba(255,255,255,0.2));
+    transform: scale(1.03);
+    box-shadow: 0 4px 15px rgba(100,180,255,0.4);
+  }
+  .play-btn.disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  /* COMING SOON CARD */
+  .coming-soon-card {
+    background: linear-gradient(145deg, rgba(100,120,255,0.15), rgba(80,100,200,0.1));
+    border-radius: 18px;
+    border: 2px dashed rgba(255,255,255,0.2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 220px;
+    gap: 10px;
+    animation: pulse-card 2.5s ease-in-out infinite;
+  }
+  @keyframes pulse-card {
+    0%, 100% { border-color: rgba(255,255,255,0.2); }
+    50% { border-color: rgba(255,255,255,0.5); box-shadow: 0 0 20px rgba(150,180,255,0.2); }
+  }
+  .coming-icon { font-size: 2.5rem; }
+  .coming-title {
+    font-family: 'Orbitron', monospace;
+    font-size: 0.75rem;
+    color: rgba(255,255,255,0.6);
+    letter-spacing: 3px;
+  }
+  .coming-sub {
+    font-size: 0.8rem;
+    color: rgba(255,255,255,0.3);
+  }
+
+  /* FOOTER */
+  footer {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    padding: 20px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    color: rgba(255,255,255,0.35);
+    font-size: 0.8rem;
+  }
+
+  /* Edit hint */
+  .edit-hint {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    color: rgba(255,255,0,0.4);
+    font-size: 0.78rem;
+    padding: 6px;
+    margin-bottom: 4px;
+  }
+
+  /* Modal */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,30,0.85);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(4px);
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: linear-gradient(145deg, #3355bb, #2244aa);
+    border-radius: 20px;
+    border: 2px solid rgba(255,255,255,0.2);
+    padding: 30px;
+    max-width: 380px;
+    width: 90%;
+    box-shadow: 0 20px 60px rgba(0,0,50,0.8);
+    animation: popIn 0.3s cubic-bezier(0.34,1.56,0.64,1);
+  }
+  @keyframes popIn {
+    from { transform: scale(0.7); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+  .modal h3 {
+    font-family: 'Orbitron', monospace;
+    font-size: 1rem;
+    color: var(--yellow);
+    margin-bottom: 18px;
+    text-align: center;
+  }
+  .modal label {
+    display: block;
+    font-size: 0.82rem;
+    color: rgba(255,255,255,0.7);
+    margin-bottom: 4px;
+    margin-top: 12px;
+  }
+  .modal input, .modal textarea {
+    width: 100%;
+    background: rgba(0,0,0,0.3);
+    border: 1.5px solid rgba(255,255,255,0.2);
+    border-radius: 8px;
+    color: white;
+    padding: 8px 12px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.9rem;
+    resize: none;
+  }
+  .modal input:focus, .modal textarea:focus {
+    outline: none;
+    border-color: rgba(100,180,255,0.6);
+  }
+  .modal-btns {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+  }
+  .modal-btn {
+    flex: 1;
+    padding: 10px;
+    border-radius: 25px;
+    border: none;
+    font-weight: 800;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: all 0.2s;
+  }
+  .modal-btn.confirm { background: var(--green-neon); color: #002200; }
+  .modal-btn.cancel { background: rgba(255,255,255,0.15); color: white; border: 1px solid rgba(255,255,255,0.3); }
+  .modal-btn:hover { transform: scale(1.04); filter: brightness(1.1); }
+
+  @media (max-width: 480px) {
+    .games-grid { grid-template-columns: 1fr; max-width: 340px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Bubbles background -->
+<div class="bubble-bg" id="bubbleBg"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">🫧</div>
+  <div class="nav-links">
+    <a href="./index.html">Accueil 🏠</a>
+    <a href="./jeux.html" class="active">Jeux 🎮</a>
+    <a href="./credits.html" class="green">Crédits 👽</a>
+  </div>
+</nav>
+
+<!-- HEADER -->
+<header>
+  <div class="site-title">
+    <span style="color:#4488ff;text-shadow:0 0 20px rgba(68,136,255,0.7)">B</span><span style="color:#00ff88;text-shadow:0 0 20px rgba(0,255,136,0.7)">u</span><span style="color:#FFE000;text-shadow:0 0 20px rgba(255,224,0,0.7)">b</span><span style="color:#00ccff;text-shadow:0 0 20px rgba(0,204,255,0.7)">b</span><span style="color:#ff8800;text-shadow:0 0 20px rgba(255,136,0,0.7)">l</span><span style="color:#aaaaaa;text-shadow:0 0 20px rgba(170,170,170,0.7)">e</span><span class="game-word"> Game</span><span class="title-dot">.</span>
+  </div>
+  <div class="header-subtitle">Ma collection de jeux</div>
+</header>
+
+<div style="position:relative;z-index:10;max-width:700px;margin:0 auto;padding:0 16px;display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+  <span style="font-family:'Orbitron',monospace;font-size:0.7rem;letter-spacing:3px;color:rgba(255,255,255,0.4);text-transform:uppercase;">🕹️ Tous mes jeux</span>
+</div>
+<div class="games-grid" id="gamesGrid">
+
+  <!-- Jeu 1 : Bully Platform 2D -->
+  <div class="game-card" id="card-0">
+    <div class="card-title-bar">
+      <div class="card-title">Bully Platform 2D</div>
+    </div>
+    <div class="card-screenshot">
+      <img id="img-0" src="bully_platform_1.png" alt="Bully Platform 2D" onerror="this.style.background='#000';this.src=''">
+    </div>
+    <div class="card-body">
+      <div class="card-desc" id="desc-0">Le premier jeu en 2D !</div>
+      <a class="play-btn" href="https://bullyinventif.github.io/Bully_platform_2D/" target="_blank">▶ JOUER</a>
+    </div>
+  </div>
+
+  <!-- Jeu 2 : BubbleCraft -->
+  <div class="game-card" id="card-1">
+    <div class="card-title-bar">
+      <div class="card-title">BubbleCraft</div>
+    </div>
+    <div class="card-screenshot">
+      <img id="img-1" src="bubblecraft_1.png" alt="BubbleCraft" onerror="this.style.background='#000';this.src=''">
+    </div>
+    <div class="card-body">
+      <div class="card-desc" id="desc-1">Un super jeu comme Minecraft mais en 2D !</div>
+      <a class="play-btn" href="https://bullyinventif.github.io/bubblecraft/" target="_blank">▶ JOUER</a>
+    </div>
+  </div>
+
+  <!-- Coming soon card -->
+  <div class="coming-soon-card">
+    <span class="coming-icon">🕹️</span>
+    <span class="coming-title">COMING SOON</span>
+    <span class="coming-sub">Un nouveau jeu arrive...</span>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+  🫧 Bubble Game. — Copyright
+</footer>
+
+<script>
+  // Bubbles background
+  const bg = document.getElementById('bubbleBg');
+  for (let i = 0; i < 18; i++) {
+    const b = document.createElement('div');
+    b.className = 'bubble';
+    const size = 20 + Math.random() * 80;
+    b.style.cssText = `
+      width: ${size}px; height: ${size}px;
+      left: ${Math.random() * 100}%;
+      animation-duration: ${8 + Math.random() * 14}s;
+      animation-delay: ${Math.random() * 10}s;
+    `;
+    bg.appendChild(b);
+  }
+</script>
+</body>
+</html>
