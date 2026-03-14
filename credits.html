@@ -279,9 +279,28 @@
     color: rgba(255,255,255,0.3);
     font-size: 0.8rem;
   }
+
+  /* PROFILE NAV */
+  .nav-profile-widget {
+    margin-left:auto; display:flex; align-items:center; gap:8px;
+    text-decoration:none; cursor:pointer; transition:opacity .2s;
+  }
+  .nav-profile-widget:hover { opacity:.85; }
+  .nav-avatar-bubble {
+    width:34px; height:34px; border-radius:50%;
+    background:radial-gradient(circle at 38% 28%,#c8e8ff,#4488cc 50%,#1a2a5c);
+    border:2px solid rgba(255,255,255,.5);
+    display:flex; align-items:center; justify-content:center;
+    overflow:hidden; flex-shrink:0; font-size:1.1rem;
+  }
+  .nav-avatar-bubble img { width:100%; height:100%; object-fit:cover; border-radius:50%; }
+  .nav-profile-info { display:flex; flex-direction:column; line-height:1.2; }
+  .nav-profile-name { font-size:.8rem; font-weight:800; color:white; }
+  .nav-profile-sub  { font-size:.55rem; color:rgba(255,255,255,.55); font-family:'Orbitron',monospace; letter-spacing:1px; }
+
 </style>
 </head>
-<body>
+<body style="visibility:hidden">
 
 <div class="bubble-bg" id="bubbleBg"></div>
 
@@ -294,6 +313,13 @@
     <a href="#">Classements 🏆</a>
     <a href="credits.html" class="active">Crédits 👽</a>
   </div>
+  <a href="https://bullyinventif.github.io/bubble-site/bubble_site_profil.html" class="nav-profile-widget">
+    <div class="nav-avatar-bubble" id="navAvatarBubble">🧙</div>
+    <div class="nav-profile-info">
+      <span class="nav-profile-name" id="navProfileName">...</span>
+      <span class="nav-profile-sub"  id="navProfileSub">—</span>
+    </div>
+  </a>
 </nav>
 
 <!-- HEADER -->
@@ -386,5 +412,61 @@
     bg.appendChild(b);
   }
 </script>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+  import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+  const BUBBLE_SITE = "https://bullyinventif.github.io/bubble-site/";
+  const SUB_ORDER   = {basic:0,plus:1,x:2,max:3};
+  const SUB_LABELS  = {basic:"BASIC",plus:"BUBBLE+",x:"BUBBLE X",max:"BUBBLE MAX"};
+
+  const app  = initializeApp({
+    apiKey:"AIzaSyAbtOtU3EZd3yccR8gPCef_wME-5qoNk3Y",
+    authDomain:"bubble-game-fa894.firebaseapp.com",
+    projectId:"bubble-game-fa894",
+    storageBucket:"bubble-game-fa894.firebasestorage.app",
+    messagingSenderId:"60256418096",
+    appId:"1:60256418096:web:dbdc555819793d8c20f0f5"
+  });
+  const auth = getAuth(app);
+  const db   = getFirestore(app);
+
+  onAuthStateChanged(auth, async user => {
+    if (!user) {
+      document.body.style.visibility='visible';
+      window.location.href = "./login.html";
+      return;
+    }
+    try {
+      const snap = await getDoc(doc(db,'users',user.uid));
+      const d    = snap.exists() ? snap.data() : {};
+      const sub  = d.subscription || 'basic';
+      const avatarId = d.avatarId || 'bully_1';
+
+      if (SUB_ORDER[sub] < SUB_ORDER['x']) {
+        window.location.href = "./login.html";
+        return;
+      }
+
+      // Pseudo
+      const pseudo = user.displayName || user.email.split('@')[0];
+
+      // Remplir le widget nav
+      const nameEl = document.getElementById('navProfileName');
+      const subEl  = document.getElementById('navProfileSub');
+      const avEl   = document.getElementById('navAvatarBubble');
+      if(nameEl) nameEl.textContent = pseudo;
+      if(subEl)  subEl.textContent  = SUB_LABELS[sub] || 'BASIC';
+      document.body.style.visibility='visible';
+      if(avEl)   avEl.innerHTML     = `<img src="${avatarId}.png" alt="avatar" onerror="this.style.display='none'">`;
+
+    } catch(e) {
+      window.location.href = "./login.html";
+    }
+  });
+</script>
+
 </body>
 </html>
