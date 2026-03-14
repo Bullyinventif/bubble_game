@@ -404,6 +404,23 @@
     .games-grid { grid-template-columns: 1fr; max-width: 340px; }
   }
 
+  /* ── MOBILE MENU ── */
+  .nav-logo{cursor:pointer;transition:transform .2s;-webkit-tap-highlight-color:transparent;}
+  .nav-logo:hover{transform:scale(1.08);}
+  .mobile-menu{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(8,0,40,.97);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);flex-direction:column;align-items:center;justify-content:center;gap:18px;z-index:999;}
+  .mobile-menu.open{display:flex;animation:fadeInMenu .22s ease;}
+  @keyframes fadeInMenu{from{opacity:0}to{opacity:1}}
+  .mobile-menu a{color:white;text-decoration:none;font-size:1.4rem;font-weight:800;font-family:'Nunito',sans-serif;padding:10px 32px;border-radius:20px;transition:background .2s;opacity:.85;}
+  .mobile-menu a:hover{background:rgba(255,255,255,.15);opacity:1;}
+  .mobile-menu a.active{color:var(--yellow);text-shadow:0 0 10px rgba(255,220,0,.7);}
+  .mobile-menu a.green{color:var(--green-neon);text-shadow:0 0 8px rgba(0,255,136,.5);}
+  .mobile-menu-close{position:absolute;top:18px;right:22px;font-size:1.8rem;cursor:pointer;opacity:.6;transition:opacity .2s;background:none;border:none;color:white;}
+  .mobile-menu-close:hover{opacity:1;}
+  @media(max-width:540px){
+    .nav-links{display:none;}
+    .nav-profile-widget .nav-profile-info{display:none;}
+  }
+
   /* PROFILE NAV */
   .nav-profile-widget {
     margin-left:auto; display:flex; align-items:center; gap:8px;
@@ -431,9 +448,7 @@
 
 <!-- NAV -->
 <nav>
-  <div class="nav-logo">🫧</div>
-  <div class="nav-links">
-    <a href="./index.html" class="active">Accueil 🏠</a>
+  <div class="nav-logo" id="menuToggle">🫧</div>
     <a href="./jeux.html">Jeux 🎮</a>
     <a href="./credits.html" class="green">Crédits 👽</a>
   </div>
@@ -445,6 +460,14 @@
     </div>
   </a>
 </nav>
+
+<!-- Menu mobile plein écran -->
+<div class="mobile-menu" id="mobileMenu">
+  <button class="mobile-menu-close" id="menuClose">✕</button>
+  <a href="./index.html" class="active">Accueil 🏠</a>
+  <a href="./jeux.html">Jeux 🎮</a>
+  <a href="./credits.html" class="green">Crédits 👽</a>
+</div>
 
 <!-- HEADER -->
 <header>
@@ -508,6 +531,15 @@
     `;
     bg.appendChild(b);
   }
+  /* ── Menu mobile ── */
+  const toggle=document.getElementById('menuToggle');
+  const menu=document.getElementById('mobileMenu');
+  const closeBtn=document.getElementById('menuClose');
+  function openMenu(){menu.classList.add('open');toggle.style.transform='scale(1.15) rotate(20deg)';}
+  function closeMenu(){menu.classList.remove('open');toggle.style.transform='';}
+  toggle.addEventListener('click',()=>menu.classList.contains('open')?closeMenu():openMenu());
+  closeBtn.addEventListener('click',closeMenu);
+  window.addEventListener('resize',()=>{if(window.innerWidth>540)closeMenu();});
 </script>
 
 <script type="module">

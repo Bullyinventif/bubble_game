@@ -298,6 +298,22 @@
   .nav-profile-name { font-size:.8rem; font-weight:800; color:white; }
   .nav-profile-sub  { font-size:.55rem; color:rgba(255,255,255,.55); font-family:'Orbitron',monospace; letter-spacing:1px; }
 
+  /* ── MOBILE MENU ── */
+  .nav-logo{cursor:pointer;transition:transform .2s;-webkit-tap-highlight-color:transparent;}
+  .nav-logo:hover{transform:scale(1.08);}
+  .mobile-menu{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(8,0,40,.97);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);flex-direction:column;align-items:center;justify-content:center;gap:18px;z-index:999;}
+  .mobile-menu.open{display:flex;animation:fadeInMenu .22s ease;}
+  @keyframes fadeInMenu{from{opacity:0}to{opacity:1}}
+  .mobile-menu a{color:white;text-decoration:none;font-size:1.4rem;font-weight:800;font-family:'Nunito',sans-serif;padding:10px 32px;border-radius:20px;transition:background .2s;opacity:.85;}
+  .mobile-menu a:hover{background:rgba(255,255,255,.15);opacity:1;}
+  .mobile-menu a.active{color:var(--green-neon);text-shadow:0 0 10px rgba(0,255,136,.6);}
+  .mobile-menu-close{position:absolute;top:18px;right:22px;font-size:1.8rem;cursor:pointer;opacity:.6;transition:opacity .2s;background:none;border:none;color:white;}
+  .mobile-menu-close:hover{opacity:1;}
+  @media(max-width:540px){
+    .nav-links{display:none;}
+    .nav-profile-widget .nav-profile-info{display:none;}
+  }
+
 </style>
 </head>
 <body style="visibility:hidden">
@@ -306,9 +322,7 @@
 
 <!-- NAV -->
 <nav>
-  <div class="nav-logo">🫧</div>
-  <div class="nav-links">
-    <a href="index.html">Accueil 🏠</a>
+  <div class="nav-logo" id="menuToggle">🫧</div>
     <a href="jeux.html">Jeux 🎮</a>
     <a href="credits.html" class="active">Crédits 👽</a>
   </div>
@@ -320,6 +334,14 @@
     </div>
   </a>
 </nav>
+
+<!-- Menu mobile plein écran -->
+<div class="mobile-menu" id="mobileMenu">
+  <button class="mobile-menu-close" id="menuClose">✕</button>
+  <a href="index.html">Accueil 🏠</a>
+  <a href="jeux.html">Jeux 🎮</a>
+  <a href="credits.html" class="active">Crédits 👽</a>
+</div>
 
 <!-- HEADER -->
 <header>
@@ -410,6 +432,15 @@
     `;
     bg.appendChild(b);
   }
+  /* ── Menu mobile ── */
+  const toggle=document.getElementById('menuToggle');
+  const menu=document.getElementById('mobileMenu');
+  const closeBtn=document.getElementById('menuClose');
+  function openMenu(){menu.classList.add('open');toggle.style.transform='scale(1.15) rotate(20deg)';}
+  function closeMenu(){menu.classList.remove('open');toggle.style.transform='';}
+  toggle.addEventListener('click',()=>menu.classList.contains('open')?closeMenu():openMenu());
+  closeBtn.addEventListener('click',closeMenu);
+  window.addEventListener('resize',()=>{if(window.innerWidth>540)closeMenu();});
 </script>
 
 <script type="module">
