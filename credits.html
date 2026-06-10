@@ -1,521 +1,482 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Crédits — Bubble Game</title>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Nunito:wght@400;700;800&family=Permanent+Marker&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --purple-bg: #5500dd;
-    --blue-card: #3366cc;
-    --blue-card-light: #4488ee;
-    --yellow: #FFE000;
-    --green-neon: #00ff88;
-    --pink: #ff44aa;
-    --cyan: #00ccff;
-    --orange: #ff8800;
-    --gray: #aaaaaa;
-  }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Crédits | Bubble Game</title>
+  <link rel="icon" type="image/png" href="bully_icon_site_1.png">
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Orbitron:wght@700&family=Nunito:wght=400;700;800&display=swap" rel="stylesheet">
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+  <style>
+    :root {
+      --neon-cyan: #00FFFF;
+      --neon-purple: #FF00FF;
+      --neon-pink: #FF2E88;
+      --neon-yellow: #FFFF00;
+      --neon-green: #00FF88;
+      --bg-dark: #050508;
+      --text-light: #E0E0E0;
+      --transition: 0.2s;
+      --blur: 16px;
+    }
 
-  body {
-    background: linear-gradient(160deg, #1a0060 0%, var(--purple-bg) 40%, #3300aa 100%);
-    min-height: 100vh;
-    font-family: 'Nunito', sans-serif;
-    color: white;
-    overflow-x: hidden;
-  }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
-  /* Bubbles background */
-  .bubble-bg {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    pointer-events: none;
-    z-index: 0;
-    overflow: hidden;
-  }
-  .bubble {
-    position: absolute;
-    border-radius: 50%;
-    background: radial-gradient(circle at 35% 35%, rgba(255,255,255,0.2), rgba(100,150,255,0.03));
-    border: 1px solid rgba(255,255,255,0.12);
-    animation: floatUp linear infinite;
-  }
-  @keyframes floatUp {
-    0%   { transform: translateY(110vh); opacity: 0; }
-    10%  { opacity: 0.5; }
-    90%  { opacity: 0.25; }
-    100% { transform: translateY(-10vh); opacity: 0; }
-  }
+    body {
+      background: var(--bg-dark);
+      color: var(--text-light);
+      font-family: 'Nunito', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+      visibility: hidden;
+    }
 
-  /* NAV */
-  nav {
-    position: relative;
-    z-index: 100;
-    display: flex;
-    align-items: center;
-    padding: 12px 24px;
-    background: rgba(0,0,0,0.35);
-    border-bottom: 2px solid rgba(255,255,255,0.1);
-    gap: 8px;
-    flex-wrap: wrap;
-  }
-  .nav-logo {
-    width: 36px; height: 36px;
-    background: linear-gradient(135deg, #4488ff, #aa44ff);
-    border-radius: 8px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 1.2rem;
-    margin-right: 8px;
-    box-shadow: 0 0 12px rgba(100,150,255,0.5);
-  }
-  .nav-links { display: flex; gap: 6px; flex-wrap: wrap; }
-  .nav-links a {
-    color: white; text-decoration: none;
-    font-size: 0.95rem; font-weight: 700;
-    padding: 4px 14px; border-radius: 20px;
-    transition: all 0.2s; opacity: 0.85;
-  }
-  .nav-links a:hover { background: rgba(255,255,255,0.15); opacity: 1; }
-  .nav-links a.active { color: var(--green-neon); text-shadow: 0 0 10px rgba(0,255,136,0.6); }
+    /* Grille Cyber */
+    .cyber-grid {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background-image:
+        linear-gradient(rgba(0, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 255, 255, 0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+      z-index: -2;
+    }
 
-  /* HEADER */
-  header {
-    position: relative; z-index: 10;
-    text-align: center;
-    padding: 50px 20px 20px;
-  }
-  .site-title {
-    font-family: 'Permanent Marker', cursive;
-    font-size: clamp(2.2rem, 6vw, 4rem);
-    line-height: 1;
-  }
-  .game-word {
-    font-family: 'Orbitron', monospace;
-    font-size: 0.75em;
-    color: var(--yellow);
-    text-shadow: 0 0 20px rgba(255,220,0,0.5);
-    letter-spacing: 4px;
-  }
-  .page-label {
-    display: inline-block;
-    margin-top: 14px;
-    font-family: 'Orbitron', monospace;
-    font-size: 0.7rem;
-    letter-spacing: 5px;
-    color: rgba(255,255,255,0.45);
-    text-transform: uppercase;
-    border-top: 1px solid rgba(255,255,255,0.15);
-    border-bottom: 1px solid rgba(255,255,255,0.15);
-    padding: 6px 20px;
-  }
+    /* Bulles */
+    .bubble-bg {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: -1;
+      overflow: hidden;
+    }
+    .bubble {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(0.5px);
+      animation: float linear infinite;
+    }
+    @keyframes float {
+      0% { transform: translateY(100vh) translateX(0); opacity: 0; }
+      10% { opacity: 0.7; }
+      90% { opacity: 0.7; }
+      100% { transform: translateY(-100px) translateX(50px); opacity: 0; }
+    }
 
-  /* MAIN */
-  main {
-    position: relative; z-index: 10;
-    max-width: 680px;
-    margin: 40px auto 60px;
-    padding: 0 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 28px;
-  }
+    /* NAVBAR */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      padding: 12px 24px;
+      background: rgba(10, 0, 30, 0.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(0, 255, 255, 0.3);
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .nav-logo {
+      width: 40px; height: 40px;
+      background: radial-gradient(circle at 30% 30%, var(--neon-cyan), #0088FF);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      margin-right: 8px;
+      box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
+      border: 2px solid var(--neon-cyan);
+      cursor: pointer;
+      transition: all var(--transition);
+    }
+    .nav-logo:hover { transform: scale(1.1) rotate(10deg); box-shadow: 0 0 25px rgba(0, 255, 255, 0.8); }
+    .nav-links { display: flex; gap: 6px; flex-wrap: wrap; }
+    .nav-links a {
+      color: white; text-decoration: none; font-size: 0.95rem; font-weight: 700;
+      padding: 6px 14px; border-radius: 20px;
+      background: rgba(0, 255, 255, 0.1); border: 1px solid rgba(0, 255, 255, 0.3);
+      transition: all var(--transition); opacity: 0.85;
+    }
+    .nav-links a:hover { background: rgba(0, 255, 255, 0.2); opacity: 1; box-shadow: 0 0 10px rgba(0, 255, 255, 0.3); }
+    .nav-links a.green { color: var(--neon-green); text-shadow: 0 0 8px rgba(0, 255, 136, 0.5); }
 
-  /* SECTION */
-  .section {
-    background: linear-gradient(145deg, var(--blue-card-light), var(--blue-card));
-    border-radius: 18px;
-    border: 2px solid rgba(255,255,255,0.15);
-    box-shadow: 0 8px 25px rgba(0,0,50,0.4), inset 0 1px 0 rgba(255,255,255,0.15);
-    overflow: hidden;
-  }
+    /* PROFIL */
+    .nav-profile-widget {
+      margin-left: auto; display: flex; align-items: center; gap: 8px;
+      text-decoration: none; cursor: pointer; transition: opacity var(--transition);
+    }
+    .nav-profile-widget:hover { opacity: 0.85; }
+    .nav-avatar-bubble {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, #c8e8ff, #4488cc 50%, #1a2a5c);
+      border: 2px solid var(--neon-cyan);
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden; flex-shrink: 0; box-shadow: 0 0 10px rgba(0, 255, 255, 0.4);
+    }
+    .nav-avatar-bubble img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+    .nav-profile-info { display: flex; flex-direction: column; line-height: 1.2; }
+    .nav-profile-name { font-size: 0.8rem; font-weight: 800; color: white; }
+    .nav-profile-sub { font-size: 0.55rem; color: rgba(255, 255, 255, 0.55); font-family: 'Orbitron', monospace; letter-spacing: 1px; }
 
-  .section-header {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 16px 22px;
-    border-bottom: 1px solid rgba(255,255,255,0.1);
-    background: rgba(0,0,0,0.15);
-  }
-  .section-icon { font-size: 1.4rem; }
-  .section-title {
-    font-family: 'Orbitron', monospace;
-    font-size: 0.75rem;
-    letter-spacing: 3px;
-    color: rgba(255,255,255,0.85);
-    text-transform: uppercase;
-  }
+    /* MENU MOBILE */
+    .mobile-menu {
+      display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(8, 0, 40, 0.97); backdrop-filter: blur(22px); -webkit-backdrop-filter: blur(22px);
+      flex-direction: column; align-items: center; justify-content: center; gap: 18px; z-index: 999;
+    }
+    .mobile-menu.open { display: flex; animation: fadeInMenu 0.22s ease; }
+    @keyframes fadeInMenu { from { opacity: 0; } to { opacity: 1; } }
+    .mobile-menu a {
+      color: white; text-decoration: none; font-size: 1.4rem; font-weight: 800;
+      font-family: 'Nunito', sans-serif; padding: 10px 32px; border-radius: 20px;
+      transition: background 0.2s; opacity: 0.85;
+    }
+    .mobile-menu a:hover { background: rgba(255, 255, 255, 0.15); opacity: 1; }
+    .mobile-menu a.green { color: var(--neon-green); text-shadow: 0 0 8px rgba(0, 255, 136, 0.5); }
+    .mobile-menu-close {
+      position: absolute; top: 18px; right: 22px; font-size: 1.8rem;
+      cursor: pointer; opacity: 0.6; transition: opacity var(--transition);
+      background: none; border: none; color: white;
+    }
+    .mobile-menu-close:hover { opacity: 1; }
 
-  .section-body { padding: 22px; }
+    /* HEADER */
+    header {
+      position: relative;
+      z-index: 10;
+      text-align: center;
+      padding: 60px 20px 50px;
+    }
+    .site-title {
+      font-family: 'Press Start 2P', cursive;
+      font-size: clamp(2rem, 8vw, 4rem);
+      line-height: 1.2;
+      letter-spacing: 3px;
+      margin-bottom: 15px;
+    }
+    .site-title span:nth-child(1) { color: #4488ff; text-shadow: 0 0 20px rgba(68, 136, 255, 0.7); }
+    .site-title span:nth-child(2) { color: var(--neon-green); text-shadow: 0 0 20px rgba(0, 255, 136, 0.7); }
+    .site-title span:nth-child(3) { color: var(--neon-yellow); text-shadow: 0 0 20px rgba(255, 224, 0, 0.7); }
+    .site-title span:nth-child(4) { color: var(--neon-cyan); text-shadow: 0 0 20px rgba(0, 204, 255, 0.7); }
+    .site-title span:nth-child(5) { color: var(--neon-orange); text-shadow: 0 0 20px rgba(255, 136, 0, 0.7); }
+    .site-title span:nth-child(6) { color: #aaaaaa; text-shadow: 0 0 20px rgba(170, 170, 170, 0.7); }
+    .site-title span:nth-child(7) { color: #fd0000; text-shadow: 0 0 20px rgba(255, 0, 0, 0.7); }
+    .credits-word {
+      color: var(--neon-pink) !important;
+      text-shadow: 3px 3px 0 rgba(0, 0, 0, 0.5), 0 0 20px rgba(255, 46, 136, 0.5) !important;
+      letter-spacing: 4px !important;
+      font-size: 0.6em !important;
+      font-family: 'Orbitron', monospace !important;
+    }
+    .header-subtitle {
+      font-family: 'Orbitron', monospace;
+      font-size: 0.8rem;
+      color: rgba(255, 255, 255, 0.6);
+      letter-spacing: 3px;
+      margin-bottom: 40px;
+    }
 
-  /* BUBBLE INC CARD */
-  .bubble-inc {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    flex-wrap: wrap;
-  }
-  .bubble-inc-logo {
-    width: 80px; height: 80px;
-    background: linear-gradient(135deg, #4488ff, #aa44ff);
-    border-radius: 20px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 2.5rem;
-    box-shadow: 0 0 25px rgba(100,150,255,0.5);
-    flex-shrink: 0;
-  }
-  .bubble-inc-info { flex: 1; }
-  .bubble-inc-name {
-    font-family: 'Permanent Marker', cursive;
-    font-size: 1.8rem;
-    line-height: 1.1;
-  }
-  .bubble-inc-name .b { color: #4488ff; }
-  .bubble-inc-name .u { color: var(--green-neon); }
-  .bubble-inc-name .b2 { color: var(--yellow); }
-  .bubble-inc-name .b3 { color: var(--cyan); }
-  .bubble-inc-name .l { color: var(--orange); }
-  .bubble-inc-name .e { color: var(--gray); }
-  .bubble-inc-name .inc {
-    font-family: 'Orbitron', monospace;
-    font-size: 0.55em;
-    color: rgba(255,255,255,0.5);
-    letter-spacing: 3px;
-    display: block;
-    margin-top: 2px;
-  }
-  .bubble-inc-role {
-    margin-top: 8px;
-    font-size: 0.85rem;
-    color: rgba(255,255,255,0.55);
-    line-height: 1.5;
-  }
-  .bubble-inc-role span {
-    display: inline-block;
-    background: rgba(255,255,255,0.1);
-    border-radius: 20px;
-    padding: 2px 12px;
-    margin: 2px 3px 2px 0;
-    font-size: 0.8rem;
-    color: rgba(255,255,255,0.75);
-  }
+    /* CONTENU PRINCIPAL */
+    main {
+      position: relative;
+      z-index: 10;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 0 20px 60px;
+    }
 
-  /* MUSIC TABLE */
-  .music-table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-  .music-table th {
-    text-align: left;
-    font-size: 0.72rem;
-    letter-spacing: 2px;
-    color: rgba(255,255,255,0.4);
-    text-transform: uppercase;
-    padding: 0 10px 12px 10px;
-    font-family: 'Orbitron', monospace;
-  }
-  .music-table td {
-    padding: 10px;
-    font-size: 0.88rem;
-    vertical-align: middle;
-    border-top: 1px solid rgba(255,255,255,0.07);
-  }
-  .music-table tr:first-child td { border-top: none; }
-  .music-table tr:hover td { background: rgba(255,255,255,0.04); }
+    /* SECTIONS DES CRÉDITS */
+    .credits-section {
+      margin-bottom: 50px;
+      text-align: center;
+    }
+    .credits-section h2 {
+      font-family: 'Orbitron', monospace;
+      font-size: 1.2rem;
+      color: var(--neon-cyan);
+      margin-bottom: 25px;
+      text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+      position: relative;
+      padding-bottom: 10px;
+    }
+    .credits-section h2::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 2px;
+      background: linear-gradient(90deg, var(--neon-cyan), var(--neon-purple));
+    }
+    .credits-list {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      text-align: left;
+    }
+    .credit-item {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      padding: 12px 20px;
+      background: rgba(0, 255, 255, 0.05);
+      border-radius: 10px;
+      border-left: 3px solid var(--neon-cyan);
+      transition: all var(--transition);
+    }
+    .credit-item:hover {
+      background: rgba(0, 255, 255, 0.1);
+      transform: translateX(5px);
+    }
+    .credit-icon {
+      font-size: 1.5rem;
+      color: var(--neon-cyan);
+      text-shadow: 0 0 5px rgba(0, 255, 255, 0.5);
+    }
+    .credit-info h3 {
+      font-size: 1rem;
+      color: white;
+      margin-bottom: 3px;
+    }
+    .credit-info p {
+      font-size: 0.85rem;
+      color: rgba(255, 255, 255, 0.6);
+    }
+    .credit-link {
+      color: var(--neon-cyan);
+      text-decoration: none;
+      transition: all var(--transition);
+    }
+    .credit-link:hover {
+      text-shadow: 0 0 5px rgba(0, 255, 255, 0.5);
+    }
 
-  .music-name { font-weight: 700; color: white; }
-  .music-artist { color: rgba(255,255,255,0.55); font-size: 0.82rem; }
-  .music-game {
-    display: inline-block;
-    padding: 2px 10px;
-    border-radius: 20px;
-    font-size: 0.75rem;
-    font-weight: 700;
-    background: rgba(255,255,255,0.1);
-    color: rgba(255,255,255,0.7);
-  }
-  .music-game.g1 { background: rgba(68,136,255,0.25); color: #88ccff; }
-  .music-game.g2 { background: rgba(0,255,136,0.15); color: var(--green-neon); }
-  .music-game.g3 { background: rgba(255,170,68,0.2); color: #ffaa44; }
-  .music-game.g4 { background: rgba(255,68,170,0.2); color: var(--pink); }
+    /* BOUTON RETOUR */
+    .back-btn {
+      display: inline-block;
+      margin: 30px auto 50px;
+      padding: 12px 30px;
+      background: rgba(0, 255, 255, 0.1);
+      border: 1px solid rgba(0, 255, 255, 0.3);
+      border-radius: 25px;
+      color: white;
+      text-decoration: none;
+      font-family: 'Orbitron', monospace;
+      font-size: 0.9rem;
+      transition: all var(--transition);
+    }
+    .back-btn:hover {
+      background: rgba(0, 255, 255, 0.2);
+      box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
+    }
 
-  .music-link {
-    color: rgba(255,255,255,0.3);
-    font-size: 0.8rem;
-    text-decoration: none;
-    transition: color 0.2s;
-  }
-  .music-link:hover { color: var(--yellow); }
+    /* FOOTER */
+    footer {
+      position: relative;
+      z-index: 10;
+      text-align: center;
+      padding: 30px 20px;
+      border-top: 1px solid rgba(0, 255, 255, 0.1);
+      color: rgba(255, 255, 255, 0.35);
+      font-size: 0.85rem;
+    }
 
-  /* ADD ROW button */
-  .add-music-hint {
-    margin-top: 14px;
-    padding: 10px 14px;
-    background: rgba(0,0,0,0.2);
-    border-radius: 10px;
-    border: 1px dashed rgba(255,255,255,0.15);
-    font-size: 0.78rem;
-    color: rgba(255,255,255,0.35);
-    line-height: 1.6;
-  }
-  .add-music-hint code {
-    background: rgba(0,0,0,0.3);
-    padding: 1px 6px;
-    border-radius: 4px;
-    color: var(--yellow);
-    font-size: 0.75rem;
-  }
-
-  /* FOOTER */
-  footer {
-    position: relative; z-index: 10;
-    text-align: center;
-    padding: 20px;
-    border-top: 1px solid rgba(255,255,255,0.1);
-    color: rgba(255,255,255,0.3);
-    font-size: 0.8rem;
-  }
-
-  /* PROFILE NAV */
-  .nav-profile-widget {
-    margin-left:auto; display:flex; align-items:center; gap:8px;
-    text-decoration:none; cursor:pointer; transition:opacity .2s;
-  }
-  .nav-profile-widget:hover { opacity:.85; }
-  .nav-avatar-bubble {
-    width:34px; height:34px; border-radius:50%;
-    background:radial-gradient(circle at 38% 28%,#c8e8ff,#4488cc 50%,#1a2a5c);
-    border:2px solid rgba(255,255,255,.5);
-    display:flex; align-items:center; justify-content:center;
-    overflow:hidden; flex-shrink:0; font-size:1.1rem;
-  }
-  .nav-avatar-bubble img { width:100%; height:100%; object-fit:cover; border-radius:50%; }
-  .nav-profile-info { display:flex; flex-direction:column; line-height:1.2; }
-  .nav-profile-name { font-size:.8rem; font-weight:800; color:white; }
-  .nav-profile-sub  { font-size:.55rem; color:rgba(255,255,255,.55); font-family:'Orbitron',monospace; letter-spacing:1px; }
-
-
-  /* ── MOBILE MENU ── */
-  .nav-logo { cursor: pointer; transition: transform .2s; -webkit-tap-highlight-color: transparent; }
-  .nav-logo:hover { transform: scale(1.08); }
-  .mobile-menu {
-    display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(8,0,40,.97); backdrop-filter: blur(22px); -webkit-backdrop-filter: blur(22px);
-    flex-direction: column; align-items: center; justify-content: center;
-    gap: 18px; z-index: 999;
-  }
-  .mobile-menu.open { display: flex; animation: fadeInMenu .22s ease; }
-  @keyframes fadeInMenu { from { opacity: 0; } to { opacity: 1; } }
-  .mobile-menu a {
-    color: white; text-decoration: none; font-size: 1.4rem; font-weight: 800;
-    font-family: 'Nunito', sans-serif; padding: 10px 32px; border-radius: 20px;
-    transition: background .2s; opacity: .85;
-  }
-  .mobile-menu a:hover { background: rgba(255,255,255,.15); opacity: 1; }
-  .mobile-menu a.active { color: var(--yellow); text-shadow: 0 0 10px rgba(255,220,0,.7); }
-  .mobile-menu a.green  { color: var(--green-neon); text-shadow: 0 0 8px rgba(0,255,136,.5); }
-  .mobile-menu a.active-green { color: var(--green-neon); text-shadow: 0 0 10px rgba(0,255,136,.6); }
-  .mobile-menu-close {
-    position: absolute; top: 18px; right: 22px; font-size: 1.8rem;
-    cursor: pointer; opacity: .6; transition: opacity .2s;
-    background: none; border: none; color: white;
-  }
-  .mobile-menu-close:hover { opacity: 1; }
-  @media (max-width: 540px) {
-    .nav-links { display: none; }
-    .nav-profile-widget .nav-profile-info { display: none; }
-  }
-
-</style>
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .nav-profile-widget .nav-profile-info { display: none; }
+      main { padding: 0 15px 40px; }
+      .credits-list { text-align: center; }
+      .credit-item { flex-direction: column; text-align: center; }
+      .back-btn { width: 100%; max-width: 300px; }
+    }
+  </style>
 </head>
-<body style="visibility:hidden">
 
-<div class="bubble-bg" id="bubbleBg"></div>
+<body>
+  <!-- Grille Cyber -->
+  <div class="cyber-grid"></div>
 
-<!-- NAV -->
-<nav>
-  <div class="nav-logo" id="menuToggle">🫧</div>
-  <div class="nav-links">
-    <a href="index.html">Accueil 🏠</a>
-    <a href="jeux.html">Jeux 🎮</a>
-    <a href="credits.html" class="active">Crédits 👽</a>
-  </div>
-  <a href="https://bullyinventif.github.io/bubble-site/bubble_site_profil.html" class="nav-profile-widget">
-    <div class="nav-avatar-bubble" id="navAvatarBubble">🧙</div>
-    <div class="nav-profile-info">
-      <span class="nav-profile-name" id="navProfileName">...</span>
-      <span class="nav-profile-sub"  id="navProfileSub">—</span>
+  <!-- Bulles Néon -->
+  <div class="bubble-bg" id="bubbleBg"></div>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-logo" id="menuToggle">🫧</div>
+    <div class="nav-links">
+      <a href="./index.html">Accueil 🏠</a>
+      <a href="./jeux.html">Jeux 🎮</a>
+      <a href="./credits.html" class="active green">Crédits 👽</a>
     </div>
-  </a>
-</nav>
+    <a href="https://bullyinventif.github.io/bubble-site/bubble_site_profil.html" class="nav-profile-widget">
+      <div class="nav-avatar-bubble" id="navAvatarBubble">🧙</div>
+      <div class="nav-profile-info">
+        <span class="nav-profile-name" id="navProfileName">...</span>
+        <span class="nav-profile-sub" id="navProfileSub">—</span>
+      </div>
+    </a>
+  </nav>
 
-<!-- Menu mobile plein écran -->
-<div class="mobile-menu" id="mobileMenu">
-  <button class="mobile-menu-close" id="menuClose">✕</button>
-  <a href="index.html">Accueil 🏠</a>
-  <a href="jeux.html">Jeux 🎮</a>
-  <a href="credits.html" class="active-green">Crédits 👽</a>
-</div>
-
-<!-- HEADER -->
-<header>
-  <div class="site-title">
-    <span style="color:#4488ff">B</span><span style="color:#00ff88">u</span><span style="color:#FFE000">b</span><span style="color:#00ccff">b</span><span style="color:#ff8800">l</span><span style="color:#aaaaaa">e</span> <span class="game-word">Game</span>.
+  <!-- Menu mobile -->
+  <div class="mobile-menu" id="mobileMenu">
+    <button class="mobile-menu-close" id="menuClose">✕</button>
+    <a href="./index.html">Accueil 🏠</a>
+    <a href="./jeux.html">Jeux 🎮</a>
+    <a href="./credits.html" class="active green">Crédits 👽</a>
   </div>
-  <div class="page-label">👽 Crédits</div>
-</header>
 
-<main>
-
-  <!-- BUBBLE INC -->
-  <div class="section">
-    <div class="section-header">
-      <span class="section-icon">🏢</span>
-      <span class="section-title">Développeur</span>
+  <!-- HEADER -->
+  <header>
+    <div class="site-title">
+      <span>C</span><span>r</span><span>é</span><span>d</span><span>i</span><span>t</span><span>s.</span><span class="credits-word"></span>
     </div>
-    <div class="section-body">
-      <div class="bubble-inc">
-        <div class="bubble-inc-logo">🫧</div>
-        <div class="bubble-inc-info">
-          <div class="bubble-inc-name">
-            <span class="b">B</span><span class="u">u</span><span class="b2">b</span><span class="b3">b</span><span class="l">l</span><span class="e">e</span><span class="inc">INC.</span>
-          </div>
-          <div class="bubble-inc-role">
-            <span>🎮 Game Dev</span>
-            <span>🎨 Game Design</span>
-            <span>💻 Web Dev</span>
+    <div class="header-subtitle">👽 REMERCIEMENTS</div>
+  </header>
+
+  <!-- CONTENU PRINCIPAL -->
+  <main>
+    <!-- Section Développeurs -->
+    <div class="credits-section">
+      <h2>👨‍💻 NOUS</h2>
+      <div class="credits-list">
+        <div class="credit-item">
+          <div class="credit-icon">👑</div>
+          <div class="credit-info">
+            <h3>Bully Inventif</h3>
+            <p>Créateur et DEV Principal</p>
           </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- MUSIQUES -->
-  <div class="section">
-    <div class="section-header">
-      <span class="section-icon">🎵</span>
-      <span class="section-title">Musiques</span>
+    <!-- Section Technologies -->
+    <div class="credits-section">
+      <h2>💻 COPYRIGHTS</h2>
+      <div class="credits-list">
+        <div class="credit-item">
+          <div class="credit-icon">🔥</div>
+          <div class="credit-info">
+            <h3>Boss Theme</h3>
+            <p>by sawsquarenoise</p>
+            <p>CC BY <a href="https://freemusicarchive.org/music/sawsquarenoise/dojokratos/boss-theme/" target="_blank">Lien</a></p>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="section-body">
-      <table class="music-table">
-        <thead>
-          <tr>
-            <th>Titre</th>
-            <th>Artiste</th>
-            <th>Lien</th>
-            <th>Licence type</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><div class="music-name">Boss Theme</div></td>
-            <td><span class="music-artist">by sawsquarenoise</span></td>
-            <td><span class="music-link"><a href="https://freemusicarchive.org/music/sawsquarenoise/dojokratos/boss-theme/" target="_blank">Lien</a></span></td>
-            <td><span class="music-licence">CC BY</span></td>
-          </tr>
-          <tr>
-            <td><div class="music-name">Tout le reste</div></td>
-            <td><span class="music-artist">Bubble inc.</span></td>
-            <td><span class="music-link">None</span></td>
-            <td><span class="music-licence">None</span></td>
-          </tr>
-        </tbody>
-      </table>
 
+    <!-- Section Remerciements NOTHING ptdr-->
 
-    </div>
-  </div>
+    <!-- Bouton Retour -->
+    <a href="./index.html" class="back-btn">← RETOUR À L'ACCUEIL</a>
+  </main>
 
-</main>
+  <!-- FOOTER -->
+  <footer>
+    🫧 Bubble inc. — Copyright | <span id="year"></span>
+  </footer>
 
-<footer>
-  🫧 Bubble inc. — Copyright
-</footer>
-
-<script>
-  const bg = document.getElementById('bubbleBg');
-  for (let i = 0; i < 18; i++) {
-    const b = document.createElement('div');
-    b.className = 'bubble';
-    const size = 20 + Math.random() * 80;
-    b.style.cssText = `
-      width:${size}px; height:${size}px;
-      left:${Math.random()*100}%;
-      animation-duration:${8+Math.random()*14}s;
-      animation-delay:${Math.random()*10}s;
-    `;
-    bg.appendChild(b);
-  }
-  /* ── Menu mobile ── */
-  const _toggle  = document.getElementById('menuToggle');
-  const _menu    = document.getElementById('mobileMenu');
-  const _closeBtn= document.getElementById('menuClose');
-  function _openMenu()  { _menu.classList.add('open');    _toggle.style.transform = 'scale(1.15) rotate(20deg)'; }
-  function _closeMenu() { _menu.classList.remove('open'); _toggle.style.transform = ''; }
-  _toggle.addEventListener('click', () => _menu.classList.contains('open') ? _closeMenu() : _openMenu());
-  _closeBtn.addEventListener('click', _closeMenu);
-  window.addEventListener('resize', () => { if (window.innerWidth > 540) _closeMenu(); });
-
-</script>
-
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-  import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
-  const BUBBLE_SITE = "https://bullyinventif.github.io/bubble-site/";
-  const SUB_ORDER   = {basic:0,plus:1,x:2,max:3};
-  const SUB_LABELS  = {basic:"BASIC",plus:"BUBBLE+",x:"BUBBLE X",max:"BUBBLE MAX"};
-
-  const app  = initializeApp({
-    apiKey:"AIzaSyAbtOtU3EZd3yccR8gPCef_wME-5qoNk3Y",
-    authDomain:"bubble-game-fa894.firebaseapp.com",
-    projectId:"bubble-game-fa894",
-    storageBucket:"bubble-game-fa894.firebasestorage.app",
-    messagingSenderId:"60256418096",
-    appId:"1:60256418096:web:dbdc555819793d8c20f0f5"
-  });
-  const auth = getAuth(app);
-  const db   = getFirestore(app);
-
-  onAuthStateChanged(auth, async user => {
-    if (!user) {
-      document.body.style.visibility='visible';
-      window.location.href = "./login.html";
-      return;
+  <!-- SCRIPT -->
+  <script type="module">
+    // ============================================
+    // 🫧 BULLES CYBER
+    const bubbleBg = document.getElementById('bubbleBg');
+    for (let i = 0; i < 15; i++) {
+      const bubble = document.createElement('div');
+      bubble.className = 'bubble';
+      const size = 20 + Math.random() * 70;
+      const left = Math.random() * 100;
+      const delay = Math.random() * 10;
+      const duration = 10 + Math.random() * 15;
+      const colors = ['#00FFFF', '#FF00FF', '#00FF88', '#FFFF00'];
+      const color = colors[Math.floor(Math.random() * colors.length)];
+      bubble.style.cssText = `
+        width: ${size}px;
+        height: ${size}px;
+        left: ${left}%;
+        animation-delay: ${delay}s;
+        animation-duration: ${duration}s;
+        background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.15), ${color}30, transparent);
+        border: 1px solid ${color}60;
+        box-shadow: 0 0 ${size/2}px ${color}40;
+        filter: blur(0.5px);
+      `;
+      bubbleBg.appendChild(bubble);
     }
-    try {
-      const snap = await getDoc(doc(db,'users',user.uid));
-      const d    = snap.exists() ? snap.data() : {};
-      const sub  = d.subscription || 'basic';
-      const avatarId = d.avatarId || 'bully_1';
 
-      if (SUB_ORDER[sub] < SUB_ORDER['x']) {
+    // ============================================
+    // 📱 MENU MOBILE
+    const menuToggle = document.getElementById('menuToggle');
+    const mobileMenu = document.getElementById('mobileMenu');
+    const menuClose = document.getElementById('menuClose');
+    function openMenu() {
+      mobileMenu.classList.add('open');
+      menuToggle.style.transform = 'scale(1.15) rotate(20deg)';
+    }
+    function closeMenu() {
+      mobileMenu.classList.remove('open');
+      menuToggle.style.transform = '';
+    }
+    menuToggle.addEventListener('click', () => mobileMenu.classList.contains('open') ? closeMenu() : openMenu());
+    menuClose.addEventListener('click', closeMenu);
+    window.addEventListener('resize', () => { if (window.innerWidth > 540) closeMenu(); });
+
+    // ============================================
+    // 📅 ANNÉE DYNAMIQUE
+    const yearSpan = document.querySelector('footer span:last-child');
+    if (yearSpan) yearSpan.textContent = new Date().getFullYear();
+
+    // ============================================
+    // 🔥 FIREBASE
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    const BUBBLE_SITE = "https://bullyinventif.github.io/bubble-site/";
+    const SUB_ORDER = { basic: 0, plus: 1, x: 2, max: 3 };
+    const SUB_LABELS = { basic: "BASIC", plus: "BUBBLE+", x: "BUBBLE X", max: "BUBBLE MAX" };
+
+    const app = initializeApp({
+      apiKey: "AIzaSyAbtOtU3EZd3yccR8gPCef_wME-5qoNk3Y",
+      authDomain: "bubble-game-fa894.firebaseapp.com",
+      projectId: "bubble-game-fa894",
+      storageBucket: "bubble-game-fa894.firebasestorage.app",
+      messagingSenderId: "60256418096",
+      appId: "1:60256418096:web:dbdc555819793d8c20f0f5"
+    });
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    onAuthStateChanged(auth, async user => {
+      if (!user) {
+        document.body.style.visibility = 'visible';
         window.location.href = "./login.html";
         return;
       }
-
-      // Pseudo
-      const pseudo = user.displayName || user.email.split('@')[0];
-
-      // Remplir le widget nav
-      const nameEl = document.getElementById('navProfileName');
-      const subEl  = document.getElementById('navProfileSub');
-      const avEl   = document.getElementById('navAvatarBubble');
-      if(nameEl) nameEl.textContent = pseudo;
-      if(subEl)  subEl.textContent  = SUB_LABELS[sub] || 'BASIC';
-      document.body.style.visibility='visible';
-      if(avEl)   avEl.innerHTML     = `<img src="${avatarId}.png" alt="avatar" onerror="this.style.display='none'">`;
-
-    } catch(e) {
-      window.location.href = "./login.html";
-    }
-  });
-</script>
-
+      try {
+        const snap = await getDoc(doc(db, 'users', user.uid));
+        const d = snap.exists() ? snap.data() : {};
+        if (SUB_ORDER[d.subscription || 'basic'] < SUB_ORDER['x']) {
+          window.location.href = "./login.html";
+          return;
+        }
+        const nameEl = document.getElementById('navProfileName');
+        const subEl = document.getElementById('navProfileSub');
+        const avEl = document.getElementById('navAvatarBubble');
+        const pseudo = user.displayName || user.email.split('@')[0];
+        if (nameEl) nameEl.textContent = pseudo;
+        if (subEl) subEl.textContent = SUB_LABELS[d.subscription || 'basic'] || 'BASIC';
+        document.body.style.visibility = 'visible';
+        const avatarId = d.avatarId || 'bully_1';
+        if (avEl) avEl.innerHTML = `<img src="${avatarId}.png" alt="avatar" onerror="this.style.display='none'">`;
+      } catch (e) {
+        window.location.href = "./login.html";
+      }
+    });
+  </script>
 </body>
 </html>
