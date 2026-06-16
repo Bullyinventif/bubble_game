@@ -249,6 +249,40 @@
     .modal-btn.confirm { background: var(--neon-green); color: #002200; }
     .modal-btn.cancel { background: rgba(255, 255, 255, 0.15); color: white; border: 1px solid rgba(255, 255, 255, 0.3); }
     .modal-btn:hover { transform: scale(1.04); filter: brightness(1.1); }
+    
+    /* ANIMATIONS DE SURVOL */
+    .hover-animation {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 1;
+    }
+    
+    @keyframes hoverFloat {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-15px) rotate(5deg); }
+    }
+    
+    @keyframes hoverWave {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+    
+    @keyframes hoverFall {
+      0% { transform: translateY(0); opacity: 1; }
+      100% { transform: translateY(200px); opacity: 0; }
+    }
+    
+    @keyframes hoverShoot {
+      0% { transform: scale(0.5); opacity: 0; }
+      10% { opacity: 1; }
+      100% { transform: translateY(-200px) scale(0); opacity: 0; }
+    }
+    
     @media (max-width: 540px) {
       .nav-links { display: none; }
       .nav-profile-widget .nav-profile-info { display: none; }
@@ -299,12 +333,13 @@
   </div>
 
   <div class="games-grid" id="gamesGrid">
-    <div class="game-card" id="card-4">
+    <div class="game-card game-spacecraft" id="card-4">
       <div class="card-title-bar">
         <div class="card-title">Spacecraft Burster <span style="color:#00FF88;font-size:0.7em;font-weight:800;text-shadow:0 0 8px rgba(0,255,136,0.5);">NEW</span></div>
       </div>
       <div class="card-screenshot">
         <img id="img-4" src="spacecraft-burster_1.png" alt="Spacecraft Burster" onerror="this.style.background='#000';this.src=''">
+        <div class="hover-animation"></div>
       </div>
       <div class="card-body">
         <div class="card-desc" id="desc-4">Détruisez les vaisseaux spatiaux et faites le meilleur score !</div>
@@ -312,12 +347,13 @@
       </div>
     </div>
 
-    <div class="game-card" id="card-3">
+    <div class="game-card game-boxrun" id="card-3">
       <div class="card-title-bar">
         <div class="card-title">Box Run <span style="color:#00FF88;font-size:0.7em;font-weight:800;text-shadow:0 0 8px rgba(0,255,136,0.5);">NEW</span></div>
       </div>
       <div class="card-screenshot">
         <img id="img-3" src="box_run_1.png" alt="Box Run" onerror="this.style.background='#000';this.src=''">
+        <div class="hover-animation"></div>
       </div>
       <div class="card-body">
         <div class="card-desc" id="desc-3">Choisisez le bon colis à livrer et faites le plus gros combo !</div>
@@ -325,12 +361,13 @@
       </div>
     </div>
 
-    <div class="game-card" id="card-2">
+    <div class="game-card game-fishing" id="card-2">
       <div class="card-title-bar">
         <div class="card-title">Fishing Time</div>
       </div>
       <div class="card-screenshot">
         <img id="img-2" src="fishing_time_1.png" alt="Fishing Time" onerror="this.style.background='#000';this.src=''">
+        <div class="hover-animation"></div>
       </div>
       <div class="card-body">
         <div class="card-desc" id="desc-2">Un jeu relaxant de pêche style pixélisé.</div>
@@ -344,6 +381,8 @@
   </footer>
 
   <script type="module">
+    // ============================================
+    // 🫧 BULLES CYBER
     const bubbleBg = document.getElementById('bubbleBg');
     for (let i = 0; i < 20; i++) {
       const bubble = document.createElement('div');
@@ -368,6 +407,8 @@
       bubbleBg.appendChild(bubble);
     }
 
+    // ============================================
+    // ✨ PARTICULES
     const particlesContainer = document.getElementById('particles');
     const particleColors = ['#00FFFF', '#FF00FF', '#00FF88', '#FFFF00'];
     document.addEventListener('mousemove', (e) => {
@@ -384,6 +425,119 @@
       }
     });
 
+    // ============================================
+    // 🎮 ANIMATIONS DE SURVOL
+    // ============================================
+    
+    // Couleurs pour chaque jeu
+    const gameConfig = {
+      bubblecraft: {
+        colors: ['#4CAF50', '#8B4513', '#F5F5DC', '#808080', '#689F38', '#A1887F'],
+        count: 15,
+        animation: 'hoverFloat'
+      },
+      fishing: {
+        colors: ['#1E88E5', '#0D47A1', '#42A5F5', '#81D4FA', '#0277BD', '#01579B'],
+        count: 20,
+        animation: 'hoverWave'
+      },
+      boxrun: {
+        img: 'box.png',
+        count: 8,
+        animation: 'hoverFall'
+      },
+      spacecraft: {
+        colors: ['#00FFFF'],
+        count: 10,
+        animation: 'hoverShoot'
+      }
+    };
+
+    function createHoverAnimation(card, gameType) {
+      const screenshot = card.querySelector('.card-screenshot');
+      let container = screenshot.querySelector('.hover-animation');
+      
+      if (!container) {
+        container = document.createElement('div');
+        container.className = 'hover-animation';
+        screenshot.appendChild(container);
+      }
+      
+      container.innerHTML = '';
+      
+      const config = gameConfig[gameType];
+      if (!config) return;
+      
+      const width = screenshot.clientWidth;
+      const height = screenshot.clientHeight;
+      
+      if (gameType === 'boxrun') {
+        // Animation Box Run - boîtes qui tombent
+        for (let i = 0; i < config.count; i++) {
+          const box = document.createElement('img');
+          box.src = config.img;
+          box.onerror = function() { this.style.display = 'none'; };
+          const delay = Math.random() * 1.5;
+          const left = Math.random() * 80 + 10;
+          box.style.cssText = `
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            left: ${left}%;
+            top: -30px;
+            animation: hoverFall ${1 + Math.random() * 1.5}s linear ${delay}s forwards;
+            opacity: 0;
+          `;
+          container.appendChild(box);
+        }
+      } else {
+        // Animations pixels/projetiles
+        for (let i = 0; i < config.count; i++) {
+          const element = document.createElement('div');
+          const color = config.colors[Math.floor(Math.random() * config.colors.length)];
+          const size = gameType === 'spacecraft' ? (3 + Math.random() * 4) : (4 + Math.random() * 6);
+          const borderRadius = Math.random() > 0.5 ? '2px' : '50%';
+          
+          element.style.cssText = `
+            position: absolute;
+            width: ${size}px;
+            height: ${size}px;
+            background: ${color};
+            border-radius: ${borderRadius};
+            left: ${Math.random() * 100}%;
+            top: ${Math.random() * 100}%;
+            animation: ${config.animation} ${2 + Math.random() * 2}s infinite ease-in-out;
+            animation-delay: ${Math.random() * 2}s;
+            box-shadow: ${gameType === 'spacecraft' ? '0 0 10px ' + color : 'none'};
+            opacity: ${gameType === 'fishing' ? 0.7 : 1};
+          `;
+          container.appendChild(element);
+        }
+      }
+    }
+
+    function clearHoverAnimation(card) {
+      const container = card.querySelector('.hover-animation');
+      if (container) {
+        container.innerHTML = '';
+      }
+    }
+
+    // Appliquer à toutes les cartes
+    document.querySelectorAll('.game-card').forEach(card => {
+      const gameType = card.classList.contains('game-spacecraft') ? 'spacecraft' :
+                      card.classList.contains('game-boxrun') ? 'boxrun' :
+                      card.classList.contains('game-fishing') ? 'fishing' :
+                      card.classList.contains('game-bubblecraft') ? 'bubblecraft' : null;
+      
+      if (gameType) {
+        card.addEventListener('mouseenter', () => createHoverAnimation(card, gameType));
+        card.addEventListener('mouseleave', () => clearHoverAnimation(card));
+      }
+    });
+
+    // ============================================
+    // 📱 MENU MOBILE
     const menuToggle = document.getElementById('menuToggle');
     const mobileMenu = document.getElementById('mobileMenu');
     const menuClose = document.getElementById('menuClose');
@@ -399,9 +553,13 @@
     menuClose.addEventListener('click', closeMenu);
     window.addEventListener('resize', () => { if (window.innerWidth > 540) closeMenu(); });
 
+    // ============================================
+    // 📅 ANNÉE DYNAMIQUE
     const yearSpan = document.querySelector('footer span:last-child');
     if (yearSpan) yearSpan.textContent = new Date().getFullYear();
 
+    // ============================================
+    // 🔥 FIREBASE
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
     import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
     import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
