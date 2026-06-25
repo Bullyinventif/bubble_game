@@ -333,47 +333,7 @@
   </div>
 
   <div class="games-grid" id="gamesGrid">
-    <div class="game-card game-spacecraft" id="card-4">
-      <div class="card-title-bar">
-        <div class="card-title">Spacecraft Burster <span style="color:#00FF88;font-size:0.7em;font-weight:800;text-shadow:0 0 8px rgba(0,255,136,0.5);">NEW</span></div>
-      </div>
-      <div class="card-screenshot">
-        <img id="img-4" src="spacecraft-burster_1.png" alt="Spacecraft Burster" onerror="this.style.background='#000';this.src=''">
-        <div class="hover-animation"></div>
-      </div>
-      <div class="card-body">
-        <div class="card-desc" id="desc-4">Détruisez les vaisseaux spatiaux et faites le meilleur score !</div>
-        <a class="play-btn" href="https://bullyinventif.github.io/spacecraft-burster/" target="_blank">▶ JOUER</a>
-      </div>
-    </div>
-
-    <div class="game-card game-boxrun" id="card-3">
-      <div class="card-title-bar">
-        <div class="card-title">Box Run <span style="color:#00FF88;font-size:0.7em;font-weight:800;text-shadow:0 0 8px rgba(0,255,136,0.5);">NEW</span></div>
-      </div>
-      <div class="card-screenshot">
-        <img id="img-3" src="box_run_1.png" alt="Box Run" onerror="this.style.background='#000';this.src=''">
-        <div class="hover-animation"></div>
-      </div>
-      <div class="card-body">
-        <div class="card-desc" id="desc-3">Choisisez le bon colis à livrer et faites le plus gros combo !</div>
-        <a class="play-btn" href="https://bullyinventif.github.io/box_run/" target="_blank">▶ JOUER</a>
-      </div>
-    </div>
-
-    <div class="game-card game-fishing" id="card-2">
-      <div class="card-title-bar">
-        <div class="card-title">Fishing Time</div>
-      </div>
-      <div class="card-screenshot">
-        <img id="img-2" src="fishing_time_1.png" alt="Fishing Time" onerror="this.style.background='#000';this.src=''">
-        <div class="hover-animation"></div>
-      </div>
-      <div class="card-body">
-        <div class="card-desc" id="desc-2">Un jeu relaxant de pêche style pixélisé.</div>
-        <a class="play-btn" href="https://bullyinventif.github.io/fishing_time/" target="_blank">▶ JOUER</a>
-      </div>
-    </div>
+    <!-- Généré automatiquement par JS depuis games-data.js (tri par id décroissant) -->
   </div>
 
   <footer>
@@ -381,6 +341,41 @@
   </footer>
 
   <script type="module">
+    import { GAMES } from './games-data.js';
+
+    // ============================================
+    // 🎮 GÉNÉRATION AUTOMATIQUE DES CARTES RÉCENTES
+    // (tri par id décroissant → 3 plus récents)
+    const recentGames = [...GAMES].sort((a, b) => b.id - a.id).slice(0, 3);
+    const maxId = recentGames[0].id;
+    const grid = document.getElementById('gamesGrid');
+
+    const titleColors = ['var(--neon-pink)', '#ffaa44', 'var(--neon-green)'];
+
+    recentGames.forEach((game, i) => {
+      const isNew = game.id >= maxId - 1;
+      const newBadge = isNew
+        ? `<span style="color:#00FF88;font-size:0.7em;font-weight:800;text-shadow:0 0 8px rgba(0,255,136,0.5);">NEW</span>`
+        : '';
+      const card = document.createElement('div');
+      card.className = `game-card game-${game.gameType}`;
+      card.id = `card-${game.id}`;
+      card.innerHTML = `
+        <div class="card-title-bar">
+          <div class="card-title" style="color:${titleColors[i]}">${game.name} ${newBadge}</div>
+        </div>
+        <div class="card-screenshot">
+          <img src="${game.image}" alt="${game.name}" onerror="this.style.background='#000';this.src=''">
+          <div class="hover-animation"></div>
+        </div>
+        <div class="card-body">
+          <div class="card-desc">${game.desc}</div>
+          <a class="play-btn" href="${game.url}" target="_blank">▶ JOUER</a>
+        </div>
+      `;
+      grid.appendChild(card);
+    });
+
     // ============================================
     // 🫧 BULLES CYBER
     const bubbleBg = document.getElementById('bubbleBg');
@@ -523,15 +518,11 @@
       }
     }
 
-    // Appliquer à toutes les cartes
-    document.querySelectorAll('.game-card').forEach(card => {
-      const gameType = card.classList.contains('game-spacecraft') ? 'spacecraft' :
-                      card.classList.contains('game-boxrun') ? 'boxrun' :
-                      card.classList.contains('game-fishing') ? 'fishing' :
-                      card.classList.contains('game-bubblecraft') ? 'bubblecraft' : null;
-      
-      if (gameType) {
-        card.addEventListener('mouseenter', () => createHoverAnimation(card, gameType));
+    // Appliquer à toutes les cartes (générées dynamiquement depuis GAMES)
+    recentGames.forEach(game => {
+      const card = document.getElementById(`card-${game.id}`);
+      if (card && gameConfig[game.gameType]) {
+        card.addEventListener('mouseenter', () => createHoverAnimation(card, game.gameType));
         card.addEventListener('mouseleave', () => clearHoverAnimation(card));
       }
     });
