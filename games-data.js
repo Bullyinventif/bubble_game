@@ -31,7 +31,7 @@ export const GAMES = [
     name: "Spacecraft Burster",
     desc: "Détruisez les vaisseaux spatiaux et faites le meilleur score !",
     image: "spacecraft-burster_1.png",
-    url: "https://bullyinventif.github.io/spacecraft_burster/",
+    url: "https://bullyinventif.github.io/spacecraft-burster/",
     gameType: "spacecraft",
     categories: []
   },
