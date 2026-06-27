@@ -570,7 +570,13 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
 
+    // Fallback: reveal body after 5s if Firebase auth never fires
+    const visibilityFallback = setTimeout(() => {
+      document.body.style.visibility = 'visible';
+    }, 5000);
+
     onAuthStateChanged(auth, async user => {
+      clearTimeout(visibilityFallback);
       if (!user) {
         document.body.style.visibility = 'visible';
         window.location.href = "./login.html";
@@ -580,6 +586,7 @@
         const snap = await getDoc(doc(db, 'users', user.uid));
         const d = snap.exists() ? snap.data() : {};
         if (SUB_ORDER[d.subscription || 'basic'] < SUB_ORDER['x']) {
+          document.body.style.visibility = 'visible';
           window.location.href = "./login.html";
           return;
         }
