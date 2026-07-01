@@ -5,478 +5,90 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Crédits | Bubble Game</title>
   <link rel="icon" type="image/png" href="bully_icon_site_1.png">
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Orbitron:wght@700&family=Nunito:wght=400;700;800&display=swap" rel="stylesheet">
-
-  <style>
-    :root {
-      --neon-cyan: #00FFFF;
-      --neon-purple: #FF00FF;
-      --neon-pink: #FF2E88;
-      --neon-yellow: #FFFF00;
-      --neon-green: #00FF88;
-      --bg-dark: #050508;
-      --text-light: #E0E0E0;
-      --transition: 0.2s;
-      --blur: 16px;
-    }
-
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-
-    body {
-      background: var(--bg-dark);
-      color: var(--text-light);
-      font-family: 'Nunito', sans-serif;
-      min-height: 100vh;
-      overflow-x: hidden;
-      visibility: hidden;
-    }
-
-    /* Grille Cyber */
-    .cyber-grid {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background-image:
-        linear-gradient(rgba(0, 255, 255, 0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0, 255, 255, 0.03) 1px, transparent 1px);
-      background-size: 40px 40px;
-      pointer-events: none;
-      z-index: -2;
-    }
-
-    /* Bulles */
-    .bubble-bg {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      z-index: -1;
-      overflow: hidden;
-    }
-    .bubble {
-      position: absolute;
-      border-radius: 50%;
-      filter: blur(0.5px);
-      animation: float linear infinite;
-    }
-    @keyframes float {
-      0% { transform: translateY(100vh) translateX(0); opacity: 0; }
-      10% { opacity: 0.7; }
-      90% { opacity: 0.7; }
-      100% { transform: translateY(-100px) translateX(50px); opacity: 0; }
-    }
-
-    /* NAVBAR */
-    nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 100;
-      display: flex;
-      align-items: center;
-      padding: 12px 24px;
-      background: rgba(10, 0, 30, 0.85);
-      backdrop-filter: blur(16px);
-      border-bottom: 1px solid rgba(0, 255, 255, 0.3);
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-    .nav-logo {
-      width: 40px; height: 40px;
-      background: radial-gradient(circle at 30% 30%, var(--neon-cyan), #0088FF);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.2rem;
-      margin-right: 8px;
-      box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
-      border: 2px solid var(--neon-cyan);
-      cursor: pointer;
-      transition: all var(--transition);
-    }
-    .nav-logo:hover { transform: scale(1.1) rotate(10deg); box-shadow: 0 0 25px rgba(0, 255, 255, 0.8); }
-    .nav-links { display: flex; gap: 6px; flex-wrap: wrap; }
-    .nav-links a {
-      color: white; text-decoration: none; font-size: 0.95rem; font-weight: 700;
-      padding: 6px 14px; border-radius: 20px;
-      background: rgba(0, 255, 255, 0.1); border: 1px solid rgba(0, 255, 255, 0.3);
-      transition: all var(--transition); opacity: 0.85;
-    }
-    .nav-links a:hover { background: rgba(0, 255, 255, 0.2); opacity: 1; box-shadow: 0 0 10px rgba(0, 255, 255, 0.3); }
-    .nav-links a.green { color: var(--neon-green); text-shadow: 0 0 8px rgba(0, 255, 136, 0.5); }
-
-    /* PROFIL */
-    .nav-profile-widget {
-      margin-left: auto; display: flex; align-items: center; gap: 8px;
-      text-decoration: none; cursor: pointer; transition: opacity var(--transition);
-    }
-    .nav-profile-widget:hover { opacity: 0.85; }
-    .nav-avatar-bubble {
-      width: 40px; height: 40px; border-radius: 50%;
-      background: radial-gradient(circle at 30% 30%, #c8e8ff, #4488cc 50%, #1a2a5c);
-      border: 2px solid var(--neon-cyan);
-      display: flex; align-items: center; justify-content: center;
-      overflow: hidden; flex-shrink: 0; box-shadow: 0 0 10px rgba(0, 255, 255, 0.4);
-    }
-    .nav-avatar-bubble img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
-    .nav-profile-info { display: flex; flex-direction: column; line-height: 1.2; }
-    .nav-profile-name { font-size: 0.8rem; font-weight: 800; color: white; }
-    .nav-profile-sub { font-size: 0.55rem; color: rgba(255, 255, 255, 0.55); font-family: 'Orbitron', monospace; letter-spacing: 1px; }
-
-    /* MENU MOBILE */
-    .mobile-menu {
-      display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(8, 0, 40, 0.97); backdrop-filter: blur(22px); -webkit-backdrop-filter: blur(22px);
-      flex-direction: column; align-items: center; justify-content: center; gap: 18px; z-index: 999;
-    }
-    .mobile-menu.open { display: flex; animation: fadeInMenu 0.22s ease; }
-    @keyframes fadeInMenu { from { opacity: 0; } to { opacity: 1; } }
-    .mobile-menu a {
-      color: white; text-decoration: none; font-size: 1.4rem; font-weight: 800;
-      font-family: 'Nunito', sans-serif; padding: 10px 32px; border-radius: 20px;
-      transition: background 0.2s; opacity: 0.85;
-    }
-    .mobile-menu a:hover { background: rgba(255, 255, 255, 0.15); opacity: 1; }
-    .mobile-menu a.green { color: var(--neon-green); text-shadow: 0 0 8px rgba(0, 255, 136, 0.5); }
-    .mobile-menu-close {
-      position: absolute; top: 18px; right: 22px; font-size: 1.8rem;
-      cursor: pointer; opacity: 0.6; transition: opacity var(--transition);
-      background: none; border: none; color: white;
-    }
-    .mobile-menu-close:hover { opacity: 1; }
-
-    /* HEADER */
-    header {
-      position: relative;
-      z-index: 10;
-      text-align: center;
-      padding: 60px 20px 50px;
-    }
-    .site-title {
-      font-family: 'Press Start 2P', cursive;
-      font-size: clamp(2rem, 8vw, 4rem);
-      line-height: 1.2;
-      letter-spacing: 3px;
-      margin-bottom: 15px;
-    }
-    .site-title span:nth-child(1) { color: #4488ff; text-shadow: 0 0 20px rgba(68, 136, 255, 0.7); }
-    .site-title span:nth-child(2) { color: var(--neon-green); text-shadow: 0 0 20px rgba(0, 255, 136, 0.7); }
-    .site-title span:nth-child(3) { color: var(--neon-yellow); text-shadow: 0 0 20px rgba(255, 224, 0, 0.7); }
-    .site-title span:nth-child(4) { color: var(--neon-cyan); text-shadow: 0 0 20px rgba(0, 204, 255, 0.7); }
-    .site-title span:nth-child(5) { color: var(--neon-orange); text-shadow: 0 0 20px rgba(255, 136, 0, 0.7); }
-    .site-title span:nth-child(6) { color: #aaaaaa; text-shadow: 0 0 20px rgba(170, 170, 170, 0.7); }
-    .site-title span:nth-child(7) { color: #fd0000; text-shadow: 0 0 20px rgba(255, 0, 0, 0.7); }
-    .credits-word {
-      color: var(--neon-pink) !important;
-      text-shadow: 3px 3px 0 rgba(0, 0, 0, 0.5), 0 0 20px rgba(255, 46, 136, 0.5) !important;
-      letter-spacing: 4px !important;
-      font-size: 0.6em !important;
-      font-family: 'Orbitron', monospace !important;
-    }
-    .header-subtitle {
-      font-family: 'Orbitron', monospace;
-      font-size: 0.8rem;
-      color: rgba(255, 255, 255, 0.6);
-      letter-spacing: 3px;
-      margin-bottom: 40px;
-    }
-
-    /* CONTENU PRINCIPAL */
-    main {
-      position: relative;
-      z-index: 10;
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 0 20px 60px;
-    }
-
-    /* SECTIONS DES CRÉDITS */
-    .credits-section {
-      margin-bottom: 50px;
-      text-align: center;
-    }
-    .credits-section h2 {
-      font-family: 'Orbitron', monospace;
-      font-size: 1.2rem;
-      color: var(--neon-cyan);
-      margin-bottom: 25px;
-      text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
-      position: relative;
-      padding-bottom: 10px;
-    }
-    .credits-section h2::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 60px;
-      height: 2px;
-      background: linear-gradient(90deg, var(--neon-cyan), var(--neon-purple));
-    }
-    .credits-list {
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-      text-align: left;
-    }
-    .credit-item {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-      padding: 12px 20px;
-      background: rgba(0, 255, 255, 0.05);
-      border-radius: 10px;
-      border-left: 3px solid var(--neon-cyan);
-      transition: all var(--transition);
-    }
-    .credit-item:hover {
-      background: rgba(0, 255, 255, 0.1);
-      transform: translateX(5px);
-    }
-    .credit-icon {
-      font-size: 1.5rem;
-      color: var(--neon-cyan);
-      text-shadow: 0 0 5px rgba(0, 255, 255, 0.5);
-    }
-    .credit-info h3 {
-      font-size: 1rem;
-      color: white;
-      margin-bottom: 3px;
-    }
-    .credit-info p {
-      font-size: 0.85rem;
-      color: rgba(255, 255, 255, 0.6);
-    }
-    .credit-link {
-      color: var(--neon-cyan);
-      text-decoration: none;
-      transition: all var(--transition);
-    }
-    .credit-link:hover {
-      text-shadow: 0 0 5px rgba(0, 255, 255, 0.5);
-    }
-
-    /* BOUTON RETOUR */
-    .back-btn {
-      display: inline-block;
-      margin: 30px auto 50px;
-      padding: 12px 30px;
-      background: rgba(0, 255, 255, 0.1);
-      border: 1px solid rgba(0, 255, 255, 0.3);
-      border-radius: 25px;
-      color: white;
-      text-decoration: none;
-      font-family: 'Orbitron', monospace;
-      font-size: 0.9rem;
-      transition: all var(--transition);
-    }
-    .back-btn:hover {
-      background: rgba(0, 255, 255, 0.2);
-      box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
-    }
-
-    /* FOOTER */
-    footer {
-      position: relative;
-      z-index: 10;
-      text-align: center;
-      padding: 30px 20px;
-      border-top: 1px solid rgba(0, 255, 255, 0.1);
-      color: rgba(255, 255, 255, 0.35);
-      font-size: 0.85rem;
-    }
-
-    /* RESPONSIVE */
-    @media (max-width: 768px) {
-      .nav-links { display: none; }
-      .nav-profile-widget .nav-profile-info { display: none; }
-      main { padding: 0 15px 40px; }
-      .credits-list { text-align: center; }
-      .credit-item { flex-direction: column; text-align: center; }
-      .back-btn { width: 100%; max-width: 300px; }
-    }
-  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Orbitron:wght@600;700;900&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-  <!-- Grille Cyber -->
-  <div class="cyber-grid"></div>
-
-  <!-- Bulles Néon -->
+  <div class="aura"></div>
+  <div class="grid-bg"></div>
   <div class="bubble-bg" id="bubbleBg"></div>
 
-  <!-- NAV -->
   <nav>
-    <div class="nav-logo" id="menuToggle">🫧</div>
+    <a href="./index.html" class="nav-logo">🫧</a>
+    <div class="brand">BUBBLE<b>GAME</b></div>
     <div class="nav-links">
-      <a href="./index.html">Accueil 🏠</a>
-      <a href="./jeux.html">Jeux 🎮</a>
-      <a href="./credits.html" class="active green">Crédits 👽</a>
+      <a href="./index.html">Accueil</a>
+      <a href="./jeux.html">Jeux</a>
+      <a href="./credits.html" class="green active">Crédits</a>
     </div>
     <a href="https://bullyinventif.github.io/bubble-site/bubble_site_profil.html" class="nav-profile-widget">
-      <div class="nav-avatar-bubble" id="navAvatarBubble">🧙</div>
       <div class="nav-profile-info">
         <span class="nav-profile-name" id="navProfileName">...</span>
         <span class="nav-profile-sub" id="navProfileSub">—</span>
       </div>
+      <div class="nav-avatar-bubble" id="navAvatarBubble">🧙</div>
     </a>
+    <button class="nav-burger" id="menuToggle" aria-label="Menu">☰</button>
   </nav>
 
-  <!-- Menu mobile -->
   <div class="mobile-menu" id="mobileMenu">
-    <button class="mobile-menu-close" id="menuClose">✕</button>
+    <button class="mobile-menu-close" id="menuClose" aria-label="Fermer">✕</button>
     <a href="./index.html">Accueil 🏠</a>
     <a href="./jeux.html">Jeux 🎮</a>
-    <a href="./credits.html" class="active green">Crédits 👽</a>
+    <a href="./credits.html" class="active">Crédits 👽</a>
   </div>
 
-  <!-- HEADER -->
-  <header>
-    <div class="site-title">
-      <span>C</span><span>r</span><span>é</span><span>d</span><span>i</span><span>t</span><span>s.</span><span class="credits-word"></span>
+  <div class="wrap" style="padding-top:40px">
+    <div class="hero" style="min-height:180px;align-items:center;justify-content:center;text-align:center">
+      <div class="hero-scrim" style="background:linear-gradient(180deg,rgba(6,6,15,.4),rgba(6,6,15,.85))"></div>
+      <div class="hero-in" style="max-width:none;text-align:center">
+        <div class="hero-kick" style="color:var(--pink)">👽 Remerciements</div>
+        <div class="hero-title" style="font-size:clamp(1.2rem,3.2vw,2rem)">Crédits</div>
+      </div>
     </div>
-    <div class="header-subtitle">👽 REMERCIEMENTS</div>
-  </header>
 
-  <!-- CONTENU PRINCIPAL -->
-  <main>
-    <!-- Section Développeurs -->
-    <div class="credits-section">
-      <h2>👨‍💻 NOUS</h2>
-      <div class="credits-list">
-        <div class="credit-item">
-          <div class="credit-icon">👑</div>
-          <div class="credit-info">
-            <h3>Bully Inventif</h3>
-            <p>Créateur et DEV Principal</p>
-          </div>
+    <div class="credits-section" style="margin-top:44px">
+      <h2>👨‍💻 Nous</h2>
+      <div class="credit-item">
+        <div class="credit-icon">👑</div>
+        <div class="credit-info">
+          <h3>Bully Inventif</h3>
+          <p>Créateur et DEV principal</p>
         </div>
       </div>
     </div>
 
-    <!-- Section Technologies -->
     <div class="credits-section">
-      <h2>💻 COPYRIGHTS</h2>
-      <div class="credits-list">
-        <div class="credit-item">
-          <div class="credit-icon">🔥</div>
-          <div class="credit-info">
-            <h3>Boss Theme</h3>
-            <p>by sawsquarenoise</p>
-            <p>CC BY <a href="https://freemusicarchive.org/music/sawsquarenoise/dojokratos/boss-theme/" target="_blank">Lien</a></p>
-          </div>
+      <h2>💻 Copyrights</h2>
+      <div class="credit-item">
+        <div class="credit-icon">🔥</div>
+        <div class="credit-info">
+          <h3>Boss Theme</h3>
+          <p>by sawsquarenoise</p>
+          <p>CC BY <a href="https://freemusicarchive.org/music/sawsquarenoise/dojokratos/boss-theme/" target="_blank" rel="noopener">Lien</a></p>
         </div>
       </div>
     </div>
 
-    <!-- Section Remerciements NOTHING ptdr-->
+    <div style="text-align:center">
+      <a href="./index.html" class="back-btn">← Retour à l'accueil</a>
+    </div>
+  </div>
 
-    <!-- Bouton Retour -->
-    <a href="./index.html" class="back-btn">← RETOUR À L'ACCUEIL</a>
-  </main>
+  <footer>🫧 Bubble inc. — Copyright | <span id="year"></span></footer>
 
-  <!-- FOOTER -->
-  <footer>
-    🫧 Bubble inc. — Copyright | <span id="year"></span>
-  </footer>
-
-  <!-- SCRIPT -->
-  <script type="module">
-    // ============================================
-    // 🫧 BULLES CYBER
-    const bubbleBg = document.getElementById('bubbleBg');
-    for (let i = 0; i < 15; i++) {
-      const bubble = document.createElement('div');
-      bubble.className = 'bubble';
-      const size = 20 + Math.random() * 70;
-      const left = Math.random() * 100;
-      const delay = Math.random() * 10;
-      const duration = 10 + Math.random() * 15;
-      const colors = ['#00FFFF', '#FF00FF', '#00FF88', '#FFFF00'];
-      const color = colors[Math.floor(Math.random() * colors.length)];
-      bubble.style.cssText = `
-        width: ${size}px;
-        height: ${size}px;
-        left: ${left}%;
-        animation-delay: ${delay}s;
-        animation-duration: ${duration}s;
-        background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.15), ${color}30, transparent);
-        border: 1px solid ${color}60;
-        box-shadow: 0 0 ${size/2}px ${color}40;
-        filter: blur(0.5px);
-      `;
-      bubbleBg.appendChild(bubble);
-    }
-
-    // ============================================
-    // 📱 MENU MOBILE
-    const menuToggle = document.getElementById('menuToggle');
-    const mobileMenu = document.getElementById('mobileMenu');
-    const menuClose = document.getElementById('menuClose');
-    function openMenu() {
-      mobileMenu.classList.add('open');
-      menuToggle.style.transform = 'scale(1.15) rotate(20deg)';
-    }
-    function closeMenu() {
-      mobileMenu.classList.remove('open');
-      menuToggle.style.transform = '';
-    }
-    menuToggle.addEventListener('click', () => mobileMenu.classList.contains('open') ? closeMenu() : openMenu());
-    menuClose.addEventListener('click', closeMenu);
-    window.addEventListener('resize', () => { if (window.innerWidth > 540) closeMenu(); });
-
-    // ============================================
-    // 📅 ANNÉE DYNAMIQUE
-    const yearSpan = document.querySelector('footer span:last-child');
-    if (yearSpan) yearSpan.textContent = new Date().getFullYear();
-
-    // ============================================
-    // 🔥 FIREBASE
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
-    const BUBBLE_SITE = "https://bullyinventif.github.io/bubble-site/";
-    const SUB_ORDER = { basic: 0, plus: 1, x: 2, max: 3 };
-    const SUB_LABELS = { basic: "BASIC", plus: "BUBBLE+", x: "BUBBLE X", max: "BUBBLE MAX" };
-
-    const app = initializeApp({
-      apiKey: "AIzaSyAbtOtU3EZd3yccR8gPCef_wME-5qoNk3Y",
-      authDomain: "bubble-game-fa894.firebaseapp.com",
-      projectId: "bubble-game-fa894",
-      storageBucket: "bubble-game-fa894.firebasestorage.app",
-      messagingSenderId: "60256418096",
-      appId: "1:60256418096:web:dbdc555819793d8c20f0f5"
-    });
-    const auth = getAuth(app);
-    const db = getFirestore(app);
-
-    onAuthStateChanged(auth, async user => {
-      if (!user) {
-        document.body.style.visibility = 'visible';
-        window.location.href = "./login.html";
-        return;
-      }
-      try {
-        const snap = await getDoc(doc(db, 'users', user.uid));
-        const d = snap.exists() ? snap.data() : {};
-        if (SUB_ORDER[d.subscription || 'basic'] < SUB_ORDER['x']) {
-          window.location.href = "./login.html";
-          return;
-        }
-        const nameEl = document.getElementById('navProfileName');
-        const subEl = document.getElementById('navProfileSub');
-        const avEl = document.getElementById('navAvatarBubble');
-        const pseudo = user.displayName || user.email.split('@')[0];
-        if (nameEl) nameEl.textContent = pseudo;
-        if (subEl) subEl.textContent = SUB_LABELS[d.subscription || 'basic'] || 'BASIC';
-        document.body.style.visibility = 'visible';
-        const avatarId = d.avatarId || 'bully_1';
-        if (avEl) avEl.innerHTML = `<img src="${avatarId}.png" alt="avatar" onerror="this.style.display='none'">`;
-      } catch (e) {
-        window.location.href = "./login.html";
-      }
-    });
+  <!-- Firebase (version compat, scripts classiques) -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+  <!-- Scripts du site (ordre important) -->
+  <script src="firebase-init.js"></script>
+  <script src="games-data.js"></script>
+  <script src="render.js"></script>
+  <script>
+    requireAccess();
+    initChrome();
+    mountBubbles(document.getElementById('bubbleBg'));
   </script>
 </body>
 </html>

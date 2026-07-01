@@ -1,4 +1,6 @@
-export const GAMES = [
+// Liste centrale de tous les jeux — ajouter un jeu ici suffit pour qu'il apparaisse automatiquement
+// id : numérique, plus grand = plus récent
+const GAMES = [
   {
     id: 1,
     name: "Bubblecraft",
