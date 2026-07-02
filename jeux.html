@@ -4,22 +4,18 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Jeux | Bubble Game</title>
-  <link rel="icon" type="image/png" href="bully_icon_site_1.png">
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Orbitron:wght@600;700;900&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+  <link rel="icon" type="image/png" href="../bully_icon_site_1.png">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Archivo+Black&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css?v=5">
 </head>
 <body>
-  <div class="aura"></div>
-  <div class="grid-bg"></div>
-  <div class="bubble-bg" id="bubbleBg"></div>
-
   <nav>
     <a href="./index.html" class="nav-logo">🫧</a>
-    <div class="brand">BUBBLE<b>GAME</b></div>
+    <div class="brand">BUBBLE GAME</div>
     <div class="nav-links">
       <a href="./index.html">Accueil</a>
       <a href="./jeux.html" class="active">Jeux</a>
-      <a href="./credits.html" class="green">Crédits</a>
+      <a href="./credits.html">Crédits</a>
     </div>
     <a href="https://bullyinventif.github.io/bubble-site/bubble_site_profil.html" class="nav-profile-widget">
       <div class="nav-profile-info">
@@ -33,47 +29,39 @@
 
   <div class="mobile-menu" id="mobileMenu">
     <button class="mobile-menu-close" id="menuClose" aria-label="Fermer">✕</button>
-    <a href="./index.html">Accueil 🏠</a>
-    <a href="./jeux.html" class="active">Jeux 🎮</a>
-    <a href="./credits.html">Crédits 👽</a>
+    <a href="./index.html">Accueil</a>
+    <a href="./jeux.html">Jeux</a>
+    <a href="./credits.html">Crédits</a>
   </div>
 
   <div class="wrap">
-    <div class="hero" id="hero"></div>
+    <div class="rowhead"><h2>TOUS LES JEUX</h2></div>
 
-    <div class="row">
-      <h2>Tous les <span>jeux</span></h2>
+    <div class="tools">
       <div class="search">
-        <input id="search" type="text" placeholder="Rechercher…" aria-label="Rechercher un jeu">
-        <span class="ic">🔍</span>
+        <input id="search" type="text" placeholder="🔍 Rechercher un jeu…" aria-label="Rechercher un jeu">
       </div>
-    </div>
-
-    <div class="chips">
-      <div class="chip active" data-f="all">Tous</div>
-      <div class="chip" data-f="new">Nouveaux</div>
-      <div class="chip" data-f="popular">Populaires</div>
+      <div class="chips">
+        <button class="chip active" data-f="all">Tous</button>
+        <button class="chip" data-f="new">Nouveaux</button>
+        <button class="chip" data-f="popular">Populaires</button>
+      </div>
     </div>
 
     <div class="grid" id="grid"></div>
   </div>
 
-  <footer>🫧 Bubble inc. — Copyright | <span id="year"></span></footer>
+  <footer>🫧 BUBBLE INC. — <span id="year"></span></footer>
 
-  <!-- Firebase (version compat, scripts classiques) -->
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
-  <!-- Scripts du site (ordre important) — ?v= = anti-cache, à incrémenter à chaque màj -->
-  <script src="firebase-init.js?v=2"></script>
-  <script src="games-data.js?v=2"></script>
-  <script src="render.js?v=2"></script>
+  <script src="firebase-init.js?v=5"></script>
+  <script src="games-data.js?v=5"></script>
+  <script src="render.js?v=5"></script>
   <script>
     requireAccess();
     initChrome();
-    mountBubbles(document.getElementById('bubbleBg'));
-
-    document.getElementById('hero').innerHTML = heroMarkup(gamesByRecent()[0]);
 
     var grid = document.getElementById('grid');
     var search = document.getElementById('search');

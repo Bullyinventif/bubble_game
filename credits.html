@@ -4,22 +4,18 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Crédits | Bubble Game</title>
-  <link rel="icon" type="image/png" href="bully_icon_site_1.png">
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Orbitron:wght@600;700;900&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+  <link rel="icon" type="image/png" href="../bully_icon_site_1.png">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Archivo+Black&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css?v=5">
 </head>
 <body>
-  <div class="aura"></div>
-  <div class="grid-bg"></div>
-  <div class="bubble-bg" id="bubbleBg"></div>
-
   <nav>
     <a href="./index.html" class="nav-logo">🫧</a>
-    <div class="brand">BUBBLE<b>GAME</b></div>
+    <div class="brand">BUBBLE GAME</div>
     <div class="nav-links">
       <a href="./index.html">Accueil</a>
       <a href="./jeux.html">Jeux</a>
-      <a href="./credits.html" class="green active">Crédits</a>
+      <a href="./credits.html" class="active">Crédits</a>
     </div>
     <a href="https://bullyinventif.github.io/bubble-site/bubble_site_profil.html" class="nav-profile-widget">
       <div class="nav-profile-info">
@@ -33,21 +29,15 @@
 
   <div class="mobile-menu" id="mobileMenu">
     <button class="mobile-menu-close" id="menuClose" aria-label="Fermer">✕</button>
-    <a href="./index.html">Accueil 🏠</a>
-    <a href="./jeux.html">Jeux 🎮</a>
-    <a href="./credits.html" class="active">Crédits 👽</a>
+    <a href="./index.html">Accueil</a>
+    <a href="./jeux.html">Jeux</a>
+    <a href="./credits.html">Crédits</a>
   </div>
 
-  <div class="wrap" style="padding-top:40px">
-    <div class="hero" style="min-height:180px;align-items:center;justify-content:center;text-align:center">
-      <div class="hero-scrim" style="background:linear-gradient(180deg,rgba(6,6,15,.4),rgba(6,6,15,.85))"></div>
-      <div class="hero-in" style="max-width:none;text-align:center">
-        <div class="hero-kick" style="color:var(--pink)">👽 Remerciements</div>
-        <div class="hero-title" style="font-size:clamp(1.2rem,3.2vw,2rem)">Crédits</div>
-      </div>
-    </div>
+  <div class="wrap">
+    <div class="rowhead"><h2>CRÉDITS 👽</h2></div>
 
-    <div class="credits-section" style="margin-top:44px">
+    <div class="credits-section">
       <h2>👨‍💻 Nous</h2>
       <div class="credit-item">
         <div class="credit-icon">👑</div>
@@ -70,25 +60,20 @@
       </div>
     </div>
 
-    <div style="text-align:center">
-      <a href="./index.html" class="back-btn">← Retour à l'accueil</a>
-    </div>
+    <a href="./index.html" class="btn back-btn">← RETOUR À L'ACCUEIL</a>
   </div>
 
-  <footer>🫧 Bubble inc. — Copyright | <span id="year"></span></footer>
+  <footer>🫧 BUBBLE INC. — <span id="year"></span></footer>
 
-  <!-- Firebase (version compat, scripts classiques) -->
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
-  <!-- Scripts du site (ordre important) — ?v= = anti-cache, à incrémenter à chaque màj -->
-  <script src="firebase-init.js?v=2"></script>
-  <script src="games-data.js?v=2"></script>
-  <script src="render.js?v=2"></script>
+  <script src="firebase-init.js?v=5"></script>
+  <script src="games-data.js?v=5"></script>
+  <script src="render.js?v=5"></script>
   <script>
     requireAccess();
     initChrome();
-    mountBubbles(document.getElementById('bubbleBg'));
   </script>
 </body>
 </html>
