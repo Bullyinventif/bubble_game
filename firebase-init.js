@@ -14,6 +14,14 @@ const FIREBASE_CONFIG = {
   appId: "1:60256418096:web:dbdc555819793d8c20f0f5"
 };
 
+// Les avatars vivent UNIQUEMENT sur le Bubble Site. On charge les images
+// directement depuis là-bas plutôt que d'en garder une copie ici : dès
+// que Bully ajoute une nouvelle icône sur bubble-site, elle apparaît sur
+// Bubble Game sans rien uploader ici. (Les <img> cross-origin n'ont pas
+// besoin de CORS, contrairement à fetch/XHR — ça marche sans réglage.)
+const BUBBLE_SITE = "https://bullyinventif.github.io/bubble-site/";
+function avatarUrl(avatarId) { return BUBBLE_SITE + (avatarId || 'bully_1') + '.png'; }
+
 const SUB_ORDER = { basic: 0, plus: 1, x: 2, max: 3 };
 const SUB_LABELS = { basic: "BASIC", plus: "BUBBLE+", x: "BUBBLE X", max: "BUBBLE MAX" };
 
@@ -38,7 +46,7 @@ function fillProfile(pseudo, subscription, avatarId) {
   const avEl = document.getElementById('navAvatarBubble');
   if (nameEl) nameEl.textContent = pseudo;
   if (subEl) subEl.textContent = SUB_LABELS[subscription] || 'BASIC';
-  if (avEl && avatarId) avEl.innerHTML = `<img src="${avatarId}.png" alt="avatar" onerror="this.style.display='none'">`;
+  if (avEl && avatarId) avEl.innerHTML = `<img src="${avatarUrl(avatarId)}" alt="avatar" onerror="this.style.display='none'">`;
 }
 
 // Protège la page + remplit le widget profil de la nav.

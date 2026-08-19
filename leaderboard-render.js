@@ -14,9 +14,12 @@ function lbEsc(t) {
     .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
 
-// Une petite bulle d'avatar, avec repli sur 🫧 si l'image manque
+// Une petite bulle d'avatar, avec repli sur 🫧 si l'image manque.
+// L'image vient directement de bubble-site (voir avatarUrl(), défini
+// dans firebase-init.js, chargé avant ce fichier) : pas de copie locale
+// à maintenir quand Bully ajoute une nouvelle icône de profil.
 function lbAvatar(avatarId) {
-  var src = lbEsc(avatarId || 'bully_1') + '.png';
+  var src = lbEsc(avatarUrl(avatarId));
   return '<span class="lb-av"><img src="' + src + '" alt="" ' +
     'onerror="this.parentElement.textContent=\'🫧\'"></span>';
 }
