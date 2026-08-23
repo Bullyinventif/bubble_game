@@ -4,9 +4,9 @@ var GAMES = [
   {
     id: 1,
     name: "Bubblecraft",
-    desc: "Construisez et explorez un monde fait de bulles !",
+    desc: "Construisez et detrisez des blocs dans  ce miniecraft 2D !",
     image: "bubblecraft_1.png",
-    url: "https://bullyinventif.github.io/bubblecraft/",
+    url: "https://bullyinventif.github.io/bubblecraft/index.html",
     gameType: "bubblecraft",
     categories: ["popular"]
   },
@@ -49,7 +49,7 @@ var GAMES = [
   {
     id: 6,
     name: "Level Maker",
-    desc: "Créez et personnalisez vos propres niveaux de jeu !",
+    desc: "Créez et personnalisez vos propres niveaux de jeu et partagez-les avec d'autre personnes !",
     image: "level_maker_1.png",
     url: "https://bullyinventif.github.io/level-maker/index.html",
     gameType: "levelmaker",
