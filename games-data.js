@@ -9,7 +9,7 @@ var GAMES = [
     url: "https://bullyinventif.github.io/bubblecraft/index.html",
     gameType: "bubblecraft",
     categories: ["popular"],
-    requiredSubscription: "basic"
+    requiredSubscription: "+"
   },
   {
     id: 2,
@@ -49,7 +49,7 @@ var GAMES = [
     url: "https://bullyinventif.github.io/block-craft/index.html",
     gameType: "blockcraft",
     categories: ["popular"],
-    requiredSubscription: "basic"
+    requiredSubscription: "+"
   },
   {
     id: 6,
