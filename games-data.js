@@ -49,7 +49,7 @@ var GAMES = [
   {
     id: 6,
     name: "Level Maker",
-    desc: "Créez et personnalisez vos propres niveaux de jeu et partagez-les avec d'autre personnes !",
+    desc: "Créez et personnalisez vos propres niveaux de jeu et partagez-les en ligne !",
     image: "level_maker_1.png",
     url: "https://bullyinventif.github.io/level-maker/index.html",
     gameType: "levelmaker",
