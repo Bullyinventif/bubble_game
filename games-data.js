@@ -8,7 +8,8 @@ var GAMES = [
     image: "bubblecraft_1.png",
     url: "https://bullyinventif.github.io/bubblecraft/index.html",
     gameType: "bubblecraft",
-    categories: ["popular"]
+    categories: ["popular"],
+    requiredSubscription: "basic"
   },
   {
     id: 2,
@@ -17,7 +18,8 @@ var GAMES = [
     image: "fishing_time_1.png",
     url: "https://bullyinventif.github.io/fishing_time/index.html",
     gameType: "fishing",
-    categories: []
+    categories: [],
+    requiredSubscription: "basic"
   },
   {
     id: 3,
@@ -26,7 +28,8 @@ var GAMES = [
     image: "box_run_1.png",
     url: "https://bullyinventif.github.io/box_run/index.html",
     gameType: "boxrun",
-    categories: ["popular"]
+    categories: ["popular"],
+    requiredSubscription: "basic"
   },
   {
     id: 4,
@@ -35,7 +38,8 @@ var GAMES = [
     image: "spacecraft-burster_1.png",
     url: "https://bullyinventif.github.io/spacecraft-burster/index.html",
     gameType: "spacecraft",
-    categories: []
+    categories: [],
+    requiredSubscription: "basic"
   },
   {
     id: 5,
@@ -44,16 +48,18 @@ var GAMES = [
     image: "block_craft_1.png",
     url: "https://bullyinventif.github.io/block-craft/index.html",
     gameType: "blockcraft",
-    categories: ["popular"]
+    categories: ["popular"],
+    requiredSubscription: "basic"
   },
   {
     id: 6,
     name: "Level Maker",
-    desc: "Créez et personnalisez vos propres niveaux de jeu et partagez-les en ligne !",
+    desc: "Créez vos propres niveaux et partagez-les en ligne !",
     image: "level_maker_1.png",
     url: "https://bullyinventif.github.io/level-maker/index.html",
     gameType: "levelmaker",
-    categories: []
+    categories: [],
+    requiredSubscription: "basic"
   }
   
 ];

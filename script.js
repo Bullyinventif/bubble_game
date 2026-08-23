@@ -100,10 +100,6 @@ document.addEventListener('DOMContentLoaded', () => {
     try {
       const snap = await getDoc(doc(db, 'users', user.uid));
       const d = snap.exists() ? snap.data() : {};
-      if (SUB_ORDER[d.subscription || 'basic'] < SUB_ORDER['x']) {
-        window.location.href = "./login.html";
-        return;
-      }
       const nameEl = document.getElementById('navProfileName');
       const subEl = document.getElementById('navProfileSub');
       const avEl = document.getElementById('navAvatarBubble');
