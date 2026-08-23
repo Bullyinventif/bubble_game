@@ -96,6 +96,10 @@ nav{display:flex;align-items:center;gap:14px;padding:16px 26px;background:#fff;
 .sticker.pop{background:var(--blue)}
 .sub-badge{position:absolute;top:-12px;left:-8px;background:var(--yellow);border:2px solid var(--ink);
   font-weight:700;font-size:.62rem;padding:4px 9px;transform:rotate(-6deg);box-shadow:2px 2px 0 var(--ink);z-index:2}
+.sub-badge.locked{background:var(--pink);color:#fff}
+.card.disabled{opacity:.4;cursor:not-allowed;pointer-events:auto}
+.card.disabled .shot img{filter:grayscale(80%) brightness(1.2)}
+.card.disabled .cplay{opacity:.6}
 .cbody{padding:14px 15px;display:flex;flex-direction:column;flex:1}
 .cname{font-weight:700;font-size:1.05rem;margin-bottom:4px}
 .cdesc{font-size:.8rem;font-weight:500;opacity:.75;line-height:1.35;flex:1}

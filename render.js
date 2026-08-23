@@ -17,7 +17,7 @@ function canAccessGame(g) {
 function isNew(g) { return g.id >= MAX_ID - 1; }
 function isPopular(g) { return (g.categories || []).includes('popular'); }
 function gamesByRecent() { 
-  return [...GAMES].sort((a, b) => b.id - a.id).filter(canAccessGame); 
+  return [...GAMES].sort((a, b) => b.id - a.id); 
 }
 
 function sticker(g) {
@@ -31,27 +31,55 @@ function subBadge(g) {
   const SUB_LABELS = { basic: "BASIC", plus: "BUBBLE+", x: "BUBBLE X", max: "BUBBLE MAX" };
   const req = g.requiredSubscription || 'basic';
   if (req === 'basic') return '';
-  return `<span class="sub-badge" title="Abonnement requis: ${SUB_LABELS[req] || req}">🔒 ${SUB_LABELS[req] || req}</span>`;
+  const accessible = canAccessGame(g);
+  const label = SUB_LABELS[req] || req;
+  const icon = accessible ? '🔓' : '🔒';
+  return `<span class="sub-badge ${accessible ? '' : 'locked'}" title="${accessible ? 'Accessible' : 'Abonnement requis: ' + label}">${icon} ${label}</span>`;
 }
 
 // Carte "sticker" à gros contour noir
 function gameCard(g) {
-  return `
-    <a class="card" href="${g.url}" target="_blank" rel="noopener" data-id="${g.id}">
-      ${sticker(g)}
-      ${subBadge(g)}
-      <div class="shot"><img src="${g.image}" alt="${g.name}" onerror="this.style.opacity=.2"></div>
-      <div class="cbody">
-        <div class="cname">${g.name}</div>
-        <div class="cdesc">${g.desc}</div>
-        <span class="cplay">▶ JOUER</span>
-      </div>
-    </a>`;
+  const accessible = canAccessGame(g);
+  const SUB_LABELS = { basic: "BASIC", plus: "BUBBLE+", x: "BUBBLE X", max: "BUBBLE MAX" };
+  const req = g.requiredSubscription || 'basic';
+  const reqLabel = SUB_LABELS[req] || req;
+  
+  if (accessible) {
+    return `
+      <a class="card" href="${g.url}" target="_blank" rel="noopener" data-id="${g.id}">
+        ${sticker(g)}
+        ${subBadge(g)}
+        <div class="shot"><img src="${g.image}" alt="${g.name}" onerror="this.style.opacity=.2"></div>
+        <div class="cbody">
+          <div class="cname">${g.name}</div>
+          <div class="cdesc">${g.desc}</div>
+          <span class="cplay">▶ JOUER</span>
+        </div>
+      </a>`;
+  } else {
+    return `
+      <div class="card disabled" data-id="${g.id}" onclick="alert('Il te faut un abonnement ${reqLabel} ou supérieur pour jouer à ce jeu !')">
+        ${sticker(g)}
+        ${subBadge(g)}
+        <div class="shot"><img src="${g.image}" alt="${g.name}" onerror="this.style.opacity=.2"></div>
+        <div class="cbody">
+          <div class="cname">${g.name}</div>
+          <div class="cdesc">${g.desc}</div>
+          <span class="cplay">▶ JOUER</span>
+        </div>
+      </div>`;
+  }
 }
 
 // Bloc "jeu à la une" (rempli dans .hero)
 function heroMarkup(g) {
-  return `
+  const accessible = canAccessGame(g);
+  const SUB_LABELS = { basic: "BASIC", plus: "BUBBLE+", x: "BUBBLE X", max: "BUBBLE MAX" };
+  const req = g.requiredSubscription || 'basic';
+  const reqLabel = SUB_LABELS[req] || req;
+  
+  if (accessible) {
+    return `
     <div class="hero-in">
       <span class="hero-kick">★ JEU À LA UNE</span>
       <div class="hero-title">${g.name}</div>
@@ -59,6 +87,16 @@ function heroMarkup(g) {
       <a class="btn" href="${g.url}" target="_blank" rel="noopener">▶ JOUER MAINTENANT</a>
     </div>
     <div class="hero-img"><img src="${g.image}" alt="${g.name}" onerror="this.style.opacity=.2"></div>`;
+  } else {
+    return `
+    <div class="hero-in">
+      <span class="hero-kick">★ JEU À LA UNE</span>
+      <div class="hero-title">${g.name} <span class="hero-sub-badge" style="background:var(--pink);color:#fff;font-size:.7rem;padding:2px 6px;border-radius:4px;border:1px solid var(--ink);">🔒 ${reqLabel}</span></div>
+      <div class="hero-desc">${g.desc}</div>
+      <a class="btn" href="#" onclick="alert('Il te faut un abonnement ${reqLabel} ou supérieur pour jouer à ce jeu !');return false;" style="pointer-events:auto;">▶ JOUER MAINTENANT</a>
+    </div>
+    <div class="hero-img" style="opacity:.5;"><img src="${g.image}" alt="${g.name}" onerror="this.style.opacity=.2" style="filter:grayscale(80%) brightness(1.2);"></div>`;
+  }
 }
 
 // Menu mobile + année du footer
