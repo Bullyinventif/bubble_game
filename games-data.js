@@ -15,7 +15,7 @@ const GAMES = [
     name: "Fishing Time",
     desc: "Un jeu relaxant de pêche style pixélisé.",
     image: "fishing_time_1.png",
-    url: "https://bullyinventif.github.io/fishing_time/",
+    url: "https://bullyinventif.github.io/fishing_time/index.html",
     gameType: "fishing",
     categories: []
   },
@@ -24,7 +24,7 @@ const GAMES = [
     name: "Box Run",
     desc: "Choisissez le bon colis à livrer et faites le plus gros combo !",
     image: "box_run_1.png",
-    url: "https://bullyinventif.github.io/box_run/",
+    url: "https://bullyinventif.github.io/box_run/index.html",
     gameType: "boxrun",
     categories: ["popular"]
   },
@@ -33,7 +33,7 @@ const GAMES = [
     name: "Spacecraft Burster",
     desc: "Détruisez les vaisseaux spatiaux et faites le meilleur score !",
     image: "spacecraft-burster_1.png",
-    url: "https://bullyinventif.github.io/spacecraft-burster/",
+    url: "https://bullyinventif.github.io/spacecraft-burster/index.html",
     gameType: "spacecraft",
     categories: []
   },
@@ -42,8 +42,18 @@ const GAMES = [
     name: "Block Craft",
     desc: "Construisez et détruisez dans ce jeu de construction 3D qui évoque des souvenirs !",
     image: "block_craft_1.png",
-    url: "https://bullyinventif.github.io/block-craft/",
+    url: "https://bullyinventif.github.io/block-craft/index.html",
     gameType: "blockcraft",
     categories: ["popular"]
+  },
+  {
+    id: 6,
+    name: "Level Maker",
+    desc: "Créez et personnalisez vos propres niveaux de jeu !",
+    image: "level_maker_1.png",
+    url: "https://bullyinventif.github.io/level-maker/index.html",
+    gameType: "levelmaker",
+    categories: [new]
   }
+  
 ];
