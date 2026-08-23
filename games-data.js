@@ -1,6 +1,6 @@
 // Liste centrale de tous les jeux — ajouter un jeu ici suffit pour qu'il apparaisse automatiquement
 // id : numérique, plus grand = plus récent
-const GAMES = [
+var GAMES = [
   {
     id: 1,
     name: "Bubblecraft",
@@ -53,7 +53,7 @@ const GAMES = [
     image: "level_maker_1.png",
     url: "https://bullyinventif.github.io/level-maker/index.html",
     gameType: "levelmaker",
-    categories: [new]
+    categories: []
   }
   
 ];
