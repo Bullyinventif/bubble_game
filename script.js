@@ -79,6 +79,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const BUBBLE_SITE = "https://bullyinventif.github.io/bubble-site/";
   const SUB_ORDER = { basic: 0, plus: 1, x: 2, max: 3 };
   const SUB_LABELS = { basic: "BASIC", plus: "BUBBLE+", x: "BUBBLE X", max: "BUBBLE MAX" };
+  
+  // Abonnement de l'utilisateur actuel (accessible globalement)
+  var USER_SUBSCRIPTION = 'basic';
 
   const app = initializeApp({
     apiKey: "AIzaSyAbtOtU3EZd3yccR8gPCef_wME-5qoNk3Y",
@@ -100,6 +103,7 @@ document.addEventListener('DOMContentLoaded', () => {
     try {
       const snap = await getDoc(doc(db, 'users', user.uid));
       const d = snap.exists() ? snap.data() : {};
+      USER_SUBSCRIPTION = d.subscription || 'basic';
       const nameEl = document.getElementById('navProfileName');
       const subEl = document.getElementById('navProfileSub');
       const avEl = document.getElementById('navAvatarBubble');

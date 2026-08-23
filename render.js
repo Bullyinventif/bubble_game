@@ -6,9 +6,19 @@
 
 const MAX_ID = Math.max(...GAMES.map(g => g.id));
 
+// Vérifie si l'utilisateur peut accéder à un jeu selon son abonnement
+function canAccessGame(g) {
+  const SUB_ORDER = { basic: 0, plus: 1, x: 2, max: 3 };
+  const userLevel = SUB_ORDER[typeof USER_SUBSCRIPTION !== 'undefined' ? USER_SUBSCRIPTION : 'basic'] || 0;
+  const requiredLevel = SUB_ORDER[g.requiredSubscription || 'basic'] || 0;
+  return userLevel >= requiredLevel;
+}
+
 function isNew(g) { return g.id >= MAX_ID - 1; }
 function isPopular(g) { return (g.categories || []).includes('popular'); }
-function gamesByRecent() { return [...GAMES].sort((a, b) => b.id - a.id); }
+function gamesByRecent() { 
+  return [...GAMES].sort((a, b) => b.id - a.id).filter(canAccessGame); 
+}
 
 function sticker(g) {
   if (isNew(g)) return '<span class="sticker">NEW</span>';
@@ -16,11 +26,20 @@ function sticker(g) {
   return '';
 }
 
+// Affiche le badge d'abonnement requis
+function subBadge(g) {
+  const SUB_LABELS = { basic: "BASIC", plus: "BUBBLE+", x: "BUBBLE X", max: "BUBBLE MAX" };
+  const req = g.requiredSubscription || 'basic';
+  if (req === 'basic') return '';
+  return `<span class="sub-badge" title="Abonnement requis: ${SUB_LABELS[req] || req}">🔒 ${SUB_LABELS[req] || req}</span>`;
+}
+
 // Carte "sticker" à gros contour noir
 function gameCard(g) {
   return `
     <a class="card" href="${g.url}" target="_blank" rel="noopener" data-id="${g.id}">
       ${sticker(g)}
+      ${subBadge(g)}
       <div class="shot"><img src="${g.image}" alt="${g.name}" onerror="this.style.opacity=.2"></div>
       <div class="cbody">
         <div class="cname">${g.name}</div>

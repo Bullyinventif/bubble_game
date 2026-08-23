@@ -25,6 +25,9 @@ function avatarUrl(avatarId) { return BUBBLE_SITE + (avatarId || 'bully_1') + '.
 const SUB_ORDER = { basic: 0, plus: 1, x: 2, max: 3 };
 const SUB_LABELS = { basic: "BASIC", plus: "BUBBLE+", x: "BUBBLE X", max: "BUBBLE MAX" };
 
+// Abonnement de l'utilisateur actuel (accessible globalement)
+var USER_SUBSCRIPTION = 'basic';
+
 // En local (double-clic depuis les fichiers = hostname '', ou localhost)
 // on saute la connexion pour pouvoir prévisualiser sans se logguer.
 // En prod (github.io) le contrôle d'accès s'applique normalement.
@@ -69,6 +72,7 @@ function requireAccess() {
       const snap = await db.collection('users').doc(user.uid).get();
       const data = snap.exists ? snap.data() : {};
       const sub = data.subscription || 'basic';
+      USER_SUBSCRIPTION = sub;
       fillProfile(
         user.displayName || user.email.split('@')[0],
         sub,
