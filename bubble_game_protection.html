@@ -2,7 +2,7 @@
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
   import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-  import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+  import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
   const BUBBLE_SITE = "https://bullyinventif.github.io/bubble-site/";
 
@@ -16,7 +16,6 @@
   });
   const auth = getAuth(app);
   const db   = getFirestore(app);
-
   const SUB_ORDER = { basic:0, plus:1, x:2, max:3 };
 
   onAuthStateChanged(auth, async user => {
@@ -27,7 +26,29 @@
     }
     try {
       const snap = await getDoc(doc(db, 'users', user.uid));
-      const sub  = snap.exists() ? (snap.data().subscription || 'basic') : 'basic';
+      let sub = 'basic';
+      if (snap.exists()) {
+        const data = snap.data();
+        sub = data.subscription || 'basic';
+        // Si le document n'a pas de champ subscription, on le crée avec basic
+        if (!data.subscription) {
+          await setDoc(doc(db, 'users', user.uid), { subscription: 'basic' }, { merge: true });
+        }
+      } else {
+        // Si le document utilisateur n'existe pas du tout, on le crée
+        await setDoc(doc(db, 'users', user.uid), {
+          pseudo: user.displayName || user.email.split('@')[0],
+          subscription: 'basic',
+          avatarId: 'bully_1',
+          xp: 0,
+          activeEffect: null,
+          gachaCollection: [],
+          gachaHistory: [],
+          gachaEffects: [],
+          framesUnlocked: [],
+          iconsUnlocked: []
+        });
+      }
       if (SUB_ORDER[sub] < SUB_ORDER['x']) {
         // Pas le bon abo → page abonnements
         window.location.href = BUBBLE_SITE + "bubble_site_abonnements.html";
