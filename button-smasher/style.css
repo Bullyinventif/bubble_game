@@ -1,0 +1,459 @@
+/* ============================================================
+   BUTTON SMASHER - Style Neo-Brutaliste
+   ============================================================ */
+
+:root {
+  --ink: #16130E;
+  --cream: #F4EEE2;
+  --pink: #FF5C8A;
+  --green: #3DDC84;
+  --blue: #5B8DEF;
+  --yellow: #FFC93C;
+  --red: #FF5C5C;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--cream);
+  color: var(--ink);
+  font-family: 'Space Grotesk', sans-serif;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.game-container {
+  width: 100%;
+  max-width: 600px;
+  position: relative;
+}
+
+/* ============================================================
+   ECRANS
+   ============================================================ */
+
+.screen {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  min-height: 100vh;
+  text-align: center;
+}
+
+.screen.active {
+  display: flex;
+}
+
+/* ============================================================
+   ECran Titre
+   ============================================================ */
+
+.title-screen {
+  background: linear-gradient(135deg, var(--pink) 0%, var(--blue) 100%);
+}
+
+.game-title {
+  font-family: 'Archivo Black', sans-serif;
+  font-size: clamp(2.5rem, 8vw, 5rem);
+  color: var(--cream);
+  text-shadow: 4px 4px 0 var(--ink);
+  margin-bottom: 10px;
+  line-height: 0.9;
+}
+
+.game-subtitle {
+  font-size: 1.2rem;
+  color: var(--cream);
+  opacity: 0.9;
+  margin-bottom: 40px;
+  text-shadow: 2px 2px 0 var(--ink);
+}
+
+.start-btn {
+  background: var(--yellow);
+  border: 4px solid var(--ink);
+  color: var(--ink);
+  font-family: 'Archivo Black', sans-serif;
+  font-size: 1.5rem;
+  padding: 18px 40px;
+  cursor: pointer;
+  box-shadow: 6px 6px 0 var(--ink);
+  transition: all 0.1s ease;
+  border-radius: 8px;
+}
+
+.start-btn:hover {
+  transform: translate(-3px, -3px);
+  box-shadow: 9px 9px 0 var(--ink);
+}
+
+.start-btn:active {
+  transform: translate(1px, 1px);
+  box-shadow: 3px 3px 0 var(--ink);
+}
+
+.instructions {
+  margin-top: 40px;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 20px;
+  border: 3px solid var(--ink);
+  box-shadow: 4px 4px 0 var(--ink);
+  border-radius: 8px;
+  width: 100%;
+  max-width: 400px;
+}
+
+.instructions p {
+  font-size: 0.9rem;
+  margin: 8px 0;
+  font-weight: 500;
+}
+
+.warning {
+  color: var(--red) !important;
+  font-weight: 700 !important;
+  font-size: 1rem !important;
+}
+
+/* ============================================================
+   ECran de Jeu
+   ============================================================ */
+
+.game-screen {
+  background: var(--cream);
+}
+
+.level-indicator {
+  font-family: 'Archivo Black', sans-serif;
+  font-size: 1.8rem;
+  color: var(--ink);
+  margin-bottom: 20px;
+  background: var(--yellow);
+  padding: 12px 30px;
+  border: 3px solid var(--ink);
+  box-shadow: 4px 4px 0 var(--ink);
+  border-radius: 8px;
+}
+
+.click-counter {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 30px;
+  background: #fff;
+  padding: 10px 20px;
+  border: 2px solid var(--ink);
+  box-shadow: 3px 3px 0 var(--ink);
+  border-radius: 6px;
+}
+
+.buttons-grid {
+  display: grid;
+  gap: 20px;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Niveau 1 - 1 bouton */
+.buttons-grid.level-1 {
+  grid-template-columns: 1fr;
+}
+
+/* Niveau 2 - 2 boutons */
+.buttons-grid.level-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+/* Niveau 3+ - Plusieurs boutons */
+.buttons-grid.level-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.buttons-grid.level-4 {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.buttons-grid.level-5 {
+  grid-template-columns: repeat(5, 1fr);
+}
+
+/* ============================================================
+   BOUTONS DE JEU
+   ============================================================ */
+
+.game-button {
+  position: relative;
+  aspect-ratio: 1;
+  min-width: 120px;
+  max-width: 200px;
+  cursor: pointer;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.1s ease;
+  box-shadow: 4px 4px 0 var(--ink);
+}
+
+.game-button:hover {
+  transform: scale(1.05);
+  box-shadow: 6px 6px 0 var(--ink);
+}
+
+.game-button:active {
+  transform: scale(0.95);
+  box-shadow: 2px 2px 0 var(--ink);
+}
+
+/* Sprites des boutons */
+.game-button .btn-sprite {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Archivo Black', sans-serif;
+  font-size: 1.5rem;
+  border: 4px solid var(--ink);
+  transition: all 0.1s ease;
+}
+
+/* Bouton Rouge */
+.game-button.red .btn-sprite.normal {
+  background: var(--red);
+  color: var(--cream);
+}
+
+.game-button.red .btn-sprite.pressed {
+  background: #CC0000;
+  color: var(--cream);
+  transform: translate(2px, 2px);
+}
+
+/* Bouton Bleu */
+.game-button.blue .btn-sprite.normal {
+  background: var(--blue);
+  color: var(--cream);
+}
+
+.game-button.blue .btn-sprite.pressed {
+  background: #0044CC;
+  color: var(--cream);
+  transform: translate(2px, 2px);
+}
+
+/* Bouton Vert */
+.game-button.green .btn-sprite.normal {
+  background: var(--green);
+  color: var(--ink);
+}
+
+.game-button.green .btn-sprite.pressed {
+  background: #00AA00;
+  color: var(--ink);
+  transform: translate(2px, 2px);
+}
+
+/* Bouton Jaune */
+.game-button.yellow .btn-sprite.normal {
+  background: var(--yellow);
+  color: var(--ink);
+}
+
+.game-button.yellow .btn-sprite.pressed {
+  background: #CC9900;
+  color: var(--ink);
+  transform: translate(2px, 2px);
+}
+
+/* Bouton Pink */
+.game-button.pink .btn-sprite.normal {
+  background: var(--pink);
+  color: var(--cream);
+}
+
+.game-button.pink .btn-sprite.pressed {
+  background: #CC0066;
+  color: var(--cream);
+  transform: translate(2px, 2px);
+}
+
+/* Bouton Cyan */
+.game-button.cyan .btn-sprite.normal {
+  background: #00FFFF;
+  color: var(--ink);
+}
+
+.game-button.cyan .btn-sprite.pressed {
+  background: #00CCCC;
+  color: var(--ink);
+  transform: translate(2px, 2px);
+}
+
+/* Bouton Violet */
+.game-button.purple .btn-sprite.normal {
+  background: #9900FF;
+  color: var(--cream);
+}
+
+.game-button.purple .btn-sprite.pressed {
+  background: #6600CC;
+  color: var(--cream);
+  transform: translate(2px, 2px);
+}
+
+/* Bouton Orange */
+.game-button.orange .btn-sprite.normal {
+  background: #FF8800;
+  color: var(--cream);
+}
+
+.game-button.orange .btn-sprite.pressed {
+  background: #CC6600;
+  color: var(--cream);
+  transform: translate(2px, 2px);
+}
+
+/* ============================================================
+   ECRAN DE VICTOIRE
+   ============================================================ */
+
+.win-screen {
+  background: linear-gradient(135deg, var(--green) 0%, var(--blue) 100%);
+}
+
+.win-title {
+  font-family: 'Archivo Black', sans-serif;
+  font-size: clamp(2.5rem, 8vw, 5rem);
+  color: var(--cream);
+  text-shadow: 4px 4px 0 var(--ink);
+  margin-bottom: 20px;
+}
+
+.win-message {
+  font-size: 1.3rem;
+  color: var(--cream);
+  margin-bottom: 40px;
+  text-shadow: 2px 2px 0 var(--ink);
+}
+
+/* ============================================================
+   ECRAN DE DEFAITE
+   ============================================================ */
+
+.lose-screen {
+  background: linear-gradient(135deg, var(--red) 0%, #CC0000 100%);
+}
+
+.lose-title {
+  font-family: 'Archivo Black', sans-serif;
+  font-size: clamp(2rem, 6vw, 3.5rem);
+  color: var(--cream);
+  text-shadow: 4px 4px 0 var(--ink);
+  margin-bottom: 20px;
+}
+
+.lose-message {
+  font-size: 1.2rem;
+  color: var(--cream);
+  margin-bottom: 40px;
+  text-shadow: 2px 2px 0 var(--ink);
+}
+
+/* ============================================================
+   BOUTONS DE CONTROLE
+   ============================================================ */
+
+.restart-btn,
+.menu-btn {
+  background: var(--yellow);
+  border: 4px solid var(--ink);
+  color: var(--ink);
+  font-family: 'Archivo Black', sans-serif;
+  font-size: 1.2rem;
+  padding: 15px 35px;
+  cursor: pointer;
+  box-shadow: 6px 6px 0 var(--ink);
+  transition: all 0.1s ease;
+  border-radius: 8px;
+  margin: 10px;
+}
+
+.restart-btn:hover,
+.menu-btn:hover {
+  transform: translate(-3px, -3px);
+  box-shadow: 9px 9px 0 var(--ink);
+}
+
+.restart-btn:active,
+.menu-btn:active {
+  transform: translate(1px, 1px);
+  box-shadow: 3px 3px 0 var(--ink);
+}
+
+.menu-btn {
+  background: var(--pink);
+}
+
+/* ============================================================
+   EFFETS SPECIAUX
+   ============================================================ */
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+.pulse {
+  animation: pulse 0.3s ease;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-10px); }
+  75% { transform: translateX(10px); }
+}
+
+.shake {
+  animation: shake 0.5s ease;
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 600px) {
+  .buttons-grid.level-2 {
+    grid-template-columns: 1fr;
+  }
+  
+  .buttons-grid.level-3 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .buttons-grid.level-4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .buttons-grid.level-5 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .game-button {
+    min-width: 100px;
+  }
+}
+
+@media (max-width: 400px) {
+  .buttons-grid.level-3,
+  .buttons-grid.level-4,
+  .buttons-grid.level-5 {
+    grid-template-columns: 1fr;
+  }
+}

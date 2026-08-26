@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Button Smasher | Bubble Game</title>
+  <link rel="icon" type="image/png" href="../bully_icon_site_1.png">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Archivo+Black&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="game-container">
+    <!-- Ecran titre -->
+    <div class="screen title-screen" id="titleScreen">
+      <h1 class="game-title">BUTTON SMASHER</h1>
+      <p class="game-subtitle">Clique sur le bon bouton !</p>
+      <div class="button-container">
+        <button class="start-btn" id="startBtn">
+          <span class="btn-text">COMMENCER</span>
+        </button>
+      </div>
+      <div class="instructions">
+        <p>✓ Niveau 1 : Clique 4 fois sur le bouton rouge</p>
+        <p>✓ Niveau 2 : Clique toujours sur le MÊME bouton</p>
+        <p>✓ Niveau 3 : Trouve le bon bouton parmi plusieurs</p>
+        <p class="warning">⚠️ 5 clics = Retour à l'accueil !</p>
+      </div>
+    </div>
+
+    <!-- Ecran de jeu -->
+    <div class="screen game-screen" id="gameScreen">
+      <div class="level-indicator" id="levelIndicator">NIVEAU <span id="levelNum">1</span></div>
+      <div class="click-counter" id="clickCounter">Cliques : <span id="clickCount">0</span>/4</div>
+      <div class="buttons-grid" id="buttonsGrid"></div>
+    </div>
+
+    <!-- Ecran de victoire -->
+    <div class="screen win-screen" id="winScreen">
+      <h2 class="win-title">BRAVO !</h2>
+      <p class="win-message">Tu as terminé tous les niveaux !</p>
+      <button class="restart-btn" id="restartBtn">RECOMMENCER</button>
+      <button class="menu-btn" id="menuBtn">RETOUR AU MENU</button>
+    </div>
+
+    <!-- Ecran de défaite (trop de clics) -->
+    <div class="screen lose-screen" id="loseScreen">
+      <h2 class="lose-title">TROP DE CLICS !</h2>
+      <p class="lose-message">Tu as cliqué 5 fois... Retour à l'accueil !</p>
+      <button class="restart-btn" id="loseRestartBtn">RECOMMENCER</button>
+      <button class="menu-btn" id="loseMenuBtn">RETOUR AU MENU</button>
+    </div>
+  </div>
+
+  <script src="game.js"></script>
+</body>
+</html>

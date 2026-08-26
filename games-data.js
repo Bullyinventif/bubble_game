@@ -4,7 +4,7 @@ var GAMES = [
   {
     id: 1,
     name: "Bubblecraft",
-    desc: "Construisez et detrisez des blocs dans  ce miniecraft 2D !",
+    desc: "Construisez et detrisez des blocs dans ce miniecraft 2D !",
     image: "bubblecraft_1.png",
     url: "https://bullyinventif.github.io/bubblecraft/index.html",
     gameType: "bubblecraft",
@@ -14,7 +14,7 @@ var GAMES = [
   {
     id: 2,
     name: "Fishing Time",
-    desc: "Un jeu relaxant de pêche style pixélisé.",
+    desc: "Un jeu relaxant de pêche style pixelisé.",
     image: "fishing_time_1.png",
     url: "https://bullyinventif.github.io/fishing_time/index.html",
     gameType: "fishing",
@@ -60,6 +60,15 @@ var GAMES = [
     gameType: "levelmaker",
     categories: [],
     requiredSubscription: "basic"
+  },
+  {
+    id: 7,
+    name: "Button Smasher",
+    desc: "Clique sur le bon bouton à chaque niveau ! 4 clics pour passer, 5 clics et c'est la défaite !",
+    image: "button_smasher_1.png",
+    url: "button-smasher/index.html",
+    gameType: "buttonsmasher",
+    categories: ["new"],
+    requiredSubscription: "basic"
   }
-  
 ];
